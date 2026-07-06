@@ -41,5 +41,25 @@
         /// 無效 Token
         /// </summary>
         TOKEN_INVALID = -7,
+
+        /// <summary>
+        /// 帳號不存在
+        /// </summary>
+        ADMIN_NOT_EXISTS = -8,
+
+        /// <summary>
+        /// 帳號已停用
+        /// </summary>
+        ADMIN_DISABLED = -9,
+
+        /// <summary>
+        /// 帳號已存在
+        /// </summary>
+        ADMIN_EXISTS = -10,
+
+        /// <summary>
+        /// 角色不存在
+        /// </summary>
+        ROLE_NOT_EXISTS = -11,
     }
 }

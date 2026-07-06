@@ -14,6 +14,9 @@ namespace eshop.application.Configurations
 
             services.AddSwaggerGen(options =>
             {
+                // 啟用 [SwaggerResponse] 等 Annotations
+                options.EnableAnnotations();
+
                 // 後台／前台 兩份文件
                 options.SwaggerDoc(SwaggerConst.Admin, new OpenApiInfo
                 {

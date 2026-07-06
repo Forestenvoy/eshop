@@ -15,6 +15,8 @@ var configuration = new ConfigurationBuilder()
 
 ConfigureSerilog.Prepare("eshop.application", configuration);
 
+DapperBootstrap.Init();
+
 try
 {
     var builder = WebApplication.CreateBuilder(args);
@@ -47,6 +49,8 @@ try
     builder.Services.AddJwtAuthenticationAndAuthorization(configuration, builder.Environment);
 
     builder.Services.AddCustomSwaggerGen();
+
+    builder.Services.AddCoreServices();
 
     var app = builder.Build();
 

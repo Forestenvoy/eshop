@@ -109,20 +109,26 @@ namespace eshop.application.Configurations
             // 權限授權（Permission-based policies）
             services.AddAuthorization(options =>
             {
-                //// 由 Permission constants 自動註冊 policy，每個 permission 對應一個 policy
-                //var permissions = typeof(AuthConstants.PermissionClaim)
-                //    .GetFields(BindingFlags.Public | BindingFlags.Static)
-                //    .Select(f => f.GetValue(null)?.ToString())
-                //    .Where(p => !string.IsNullOrEmpty(p));
+                // 由 Permission constants 自動註冊 policy，每個 permission 對應一個 policy
+                var permissions = typeof(AuthConstants.PermissionClaim)
+                    .GetFields(BindingFlags.Public | BindingFlags.Static)
+                    .Select(f => f.GetValue(null)?.ToString())
+                    .Where(p => !string.IsNullOrEmpty(p));
 
-                //foreach (var permission in permissions)
-                //{
-                //    options.AddPolicy(permission!, policy =>
-                //    {
-                //        // 檢查 JWT 是否包含對應 Permission claim
-                //        policy.RequireClaim(AuthConstants.Claim.Permission, permission!);
-                //    });
-                //}
+                foreach (var permission in permissions)
+                {
+                    options.AddPolicy(permission!, policy =>
+                    {
+                        // 檢查 JWT 是否包含對應 Permission claim
+                        policy.RequireClaim(AuthConstants.Claim.Permission, permission!);
+                    });
+                }
+
+                // 後台專用
+                options.AddPolicy(AuthConstants.Policy.AdminOnly, policy =>
+                {
+                    policy.RequireClaim(AuthConstants.Claim.TokenType, TokenTypeEnum.Admin.ToString());
+                });
             });
 
             return services;

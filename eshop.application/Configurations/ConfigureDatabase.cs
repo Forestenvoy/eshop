@@ -1,4 +1,5 @@
 ﻿using eshop.application.Data;
+using eshop.application.Data.Repositories;
 using MySqlConnector;
 using Serilog;
 using System.Data.Common;
@@ -30,6 +31,9 @@ namespace eshop.application.Configurations
             // 自動註冊 Repository
             services.AddRepositories();
 
+            // 啟動時自動建表／灌預設資料
+            services.AddHostedService<DatabaseBootstrapper>();
+
             return services;
         }
 
@@ -38,7 +42,8 @@ namespace eshop.application.Configurations
         /// </summary>
         private static IServiceCollection AddRepositories(this IServiceCollection services)
         {
-
+            services.AddScoped<AdminRepository>();
+            services.AddScoped<RoleRepository>();
 
             return services;
         }

@@ -5,7 +5,10 @@
       "commandVersion": "1.0",
       "serviceActions": {
         "eshop.application": "StartDebugging"
-      }
+      },
+      "composeLaunchServiceName": "eshop.application",
+      "composeLaunchAction": "LaunchBrowser",
+      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}/swagger/index.html"
     }
   }
 }
