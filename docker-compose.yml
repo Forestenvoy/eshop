@@ -1,0 +1,13 @@
+services:
+
+  mysql:
+    image: mysql:8.0.40-debian
+
+  redis:
+    image: redis:7.4-alpine
+
+  eshop.application:
+    image: ${DOCKER_REGISTRY-}eshopapplication
+    build:
+      context: .
+      dockerfile: eshop.application/Dockerfile

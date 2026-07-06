@@ -1,0 +1,29 @@
+services:
+
+  mysql:
+    ports:
+      - "16780:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=P@ssw0rd
+
+  redis:
+    ports:
+      - "16781:6379"
+
+  eshop.application:
+    env_file:
+      - compose.local.env
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+    ports:
+      - "16782:8080"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    depends_on:
+      - mysql
+      - redis
+    
