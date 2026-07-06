@@ -46,13 +46,20 @@ try
 
     builder.Services.AddJwtAuthenticationAndAuthorization(configuration, builder.Environment);
 
+    builder.Services.AddCustomSwaggerGen();
+
     var app = builder.Build();
 
     app.UseMiddleware<GlobalErrorHandler>();
 
     if (app.Environment.IsDevelopment())
     {
-
+        app.UseSwagger();
+        app.UseSwaggerUI(options =>
+        {
+            options.SwaggerEndpoint($"/swagger/{SwaggerConst.Admin}/swagger.json", "後台管理 API");
+            options.SwaggerEndpoint($"/swagger/{SwaggerConst.Front}/swagger.json", "前台購物 API");
+        });
     }
 
     app.UseHttpsRedirection();

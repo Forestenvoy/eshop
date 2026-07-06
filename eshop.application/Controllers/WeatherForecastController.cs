@@ -1,9 +1,11 @@
+using eshop.application.Configurations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eshop.application.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [ApiExplorerSettings(GroupName = SwaggerConst.Front)]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries =

@@ -20,6 +20,7 @@ namespace eshop.application.Configurations
         /// </summary>
         /// <param name="services"></param>
         /// <param name="configuration"></param>
+        /// <param name="environment"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
         public static IServiceCollection AddJwtAuthenticationAndAuthorization(this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
