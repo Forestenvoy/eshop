@@ -17,7 +17,7 @@ namespace eshop.application.Common
         /// </summary>
         protected string GetAdminAccount()
         {
-            var claim = User.Claims.FirstOrDefault(c => c.Type == AuthConstants.Claim.AdminAccount);
+            var claim = User.Claims.FirstOrDefault(c => c.Type == AuthConstants.Claim.Admin);
             return claim == null ? throw new UnauthorizedAccessException("AdminAccount claim is missing.") : claim.Value;
         }
     }

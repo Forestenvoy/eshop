@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace eshop.application.Models
 {
     /// <summary>
@@ -13,21 +15,23 @@ namespace eshop.application.Models
         /// <summary>
         /// 帳號
         /// </summary>
-        public string Account { get; set; } = string.Empty;
+        public string Account { get; set; } = default!;
 
         /// <summary>
         /// 密碼（雜湊值）
         /// </summary>
-        public string Password { get; set; } = string.Empty;
+        public string Password { get; set; } = default!;
 
         /// <summary>
         /// 角色 ID
         /// </summary>
+        [Column("role_id")]
         public int? RoleId { get; set; }
 
         /// <summary>
         /// 是否啟用
         /// </summary>
+        [Column("is_enable")]
         public bool IsEnabled { get; set; }
 
         /// <summary>
@@ -38,11 +42,13 @@ namespace eshop.application.Models
         /// <summary>
         /// 建立時間
         /// </summary>
+        [Column("created_at")]
         public DateTime CreatedAt { get; set; }
 
         /// <summary>
-        /// 最後更新時間
+        /// 修改時間
         /// </summary>
+        [Column("updated_at")]
         public DateTime UpdatedAt { get; set; }
     }
 }

@@ -1,10 +1,11 @@
 using Dapper;
+using eshop.application.Data.IRepositories;
 using eshop.application.DTO.Responses.Admin;
 using System.Data.Common;
 
 namespace eshop.application.Data.Repositories
 {
-    public class AdminRepository : BaseRepository
+    public class AdminRepository : BaseRepository, IAdminRepository
     {
         private readonly ILogger<AdminRepository> _logger;
 

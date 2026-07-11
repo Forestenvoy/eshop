@@ -2,12 +2,24 @@
 {
     public static class ResponseMessage
     {
-        public const string SUCCESS = "操作成功";
+        /// <summary>
+        /// 成功
+        /// </summary>
+        public const string SUCCESS = "Success";
 
-        public const string FAIL = "操作失敗";
+        /// <summary>
+        /// 失敗
+        /// </summary>
+        public const string FAIL = "Failed";
 
-        public const string SYSTEM_ERROR = "系統錯誤，請稍後再試";
+        /// <summary>
+        /// 系統錯誤
+        /// </summary>
+        public const string ERROR = "System error. Please try again later.";
 
-        public const string BAD_PARAMETERS = "參數錯誤";
+        /// <summary>
+        /// 非法參數
+        /// </summary>
+        public const string INVALID_PARAMETERS = "Invalid parameters.";
     }
 }

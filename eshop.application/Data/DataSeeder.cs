@@ -44,7 +44,7 @@ namespace eshop.application.Data
 
             await connection.ExecuteAsync(new CommandDefinition(
                 "INSERT INTO `role` (`name`, `modifier`) VALUES (@Name, @Modifier);",
-                new { Name = "系統總管", Modifier = "System" },
+                new { Name = "Administrator", Modifier = "System" },
                 cancellationToken: ct));
 
             logger?.LogInformation("✅ Inserted default role into 'role'.");
@@ -58,21 +58,15 @@ namespace eshop.application.Data
                 return;
             }
 
-            await connection.ExecuteAsync(new CommandDefinition(@"
-                INSERT INTO `permission` (`name`)
-                VALUES (@name1), (@name2), (@name3), (@name4), (@name5), (@name6);",
-                new
-                {
-                    name1 = AuthConstants.PermissionClaim.RoleView,
-                    name2 = AuthConstants.PermissionClaim.RoleEdit,
-                    name3 = AuthConstants.PermissionClaim.AdminView,
-                    name4 = AuthConstants.PermissionClaim.AdminEdit,
-                    name5 = AuthConstants.PermissionClaim.RecordView,
-                    name6 = AuthConstants.PermissionClaim.RecordExport,
-                },
+            var permissions = AuthConstants.Permission.All
+                .Select(code => new { code });
+
+            await connection.ExecuteAsync(new CommandDefinition(
+                "INSERT IGNORE INTO permission(code) VALUES (@code);",
+                permissions,
                 cancellationToken: ct));
 
-            logger?.LogInformation("✅ Inserted 6 default records into 'permission'.");
+            logger?.LogInformation("✅ Inserted default records into 'permission'.");
         }
 
         private static async Task SeedRolePermissionAsync(IDbConnection connection, ILogger? logger, CancellationToken ct)
@@ -83,15 +77,22 @@ namespace eshop.application.Data
                 return;
             }
 
-            await connection.ExecuteAsync(new CommandDefinition(@"
-                INSERT INTO `role_permission` (`role_id`, `permission_id`)
-                VALUES
-                    (@roleId, 1), (@roleId, 2), (@roleId, 3),
-                    (@roleId, 4), (@roleId, 5), (@roleId, 6);",
-                new { roleId = 1 },
-                cancellationToken: ct));
+            await connection.ExecuteAsync(
+                    new CommandDefinition(
+                        @"INSERT IGNORE INTO `role_permission`(`role_id`, `permission_id`)
+                            SELECT
+                                r.id,
+                                p.id
+                            FROM `role` r
+                            CROSS JOIN `permission` p
+                            WHERE r.name = @roleName;",
+                        new
+                        {
+                            roleName = "Administrator"
+                        },
+                        cancellationToken: ct));
 
-            logger?.LogInformation("✅ Inserted 6 records into 'role_permission'.");
+            logger?.LogInformation("✅ Inserted default records into 'role_permission'.");
         }
 
         private static async Task SeedAdminAsync(IDbConnection connection, ILogger? logger, CancellationToken ct)
@@ -110,7 +111,7 @@ namespace eshop.application.Data
                 VALUES (@Account, @Password, @RoleId, @IsEnabled);",
                 new
                 {
-                    Account = admin.Account,
+                    admin.Account,
                     Password = hashedPassword,
                     RoleId = 1,
                     IsEnabled = true,

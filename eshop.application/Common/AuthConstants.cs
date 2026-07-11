@@ -16,14 +16,14 @@ namespace eshop.application.Common
             public const string TokenType = "TT";
 
             /// <summary>
-            /// 後台帳號
+            /// 管理員
             /// </summary>
-            public const string AdminAccount = "adminAccount";
+            public const string Admin = "A";
 
             /// <summary>
             /// 權限代碼
             /// </summary>
-            public const string Permission = "Permission";
+            public const string Permission = "P";
         }
 
         /// <summary>
@@ -38,39 +38,52 @@ namespace eshop.application.Common
         }
 
         /// <summary>
-        /// 權限 Claim
+        /// 權限代碼
         /// </summary>
-        public static class PermissionClaim
+        public static class Permission
         {
             /// <summary>
-            /// (角色) 檢視內容
+            /// 角色-檢視內容
             /// </summary>
             public const string RoleView = "ROLE_VIEW";
 
             /// <summary>
-            /// (角色) 新增、編輯、刪除
+            /// 角色-新增、編輯、刪除
             /// </summary>
             public const string RoleEdit = "ROLE_EDIT";
 
             /// <summary>
-            /// (帳號) 檢視內容
+            /// 管理員-檢視內容
             /// </summary>
             public const string AdminView = "ADMIN_VIEW";
 
             /// <summary>
-            /// (帳號) 新增、編輯、刪除
+            /// 管理員-新增、編輯、刪除
             /// </summary>
             public const string AdminEdit = "ADMIN_EDIT";
 
             /// <summary>
-            /// (紀錄) 檢視內容
+            /// 紀錄-檢視內容
             /// </summary>
             public const string RecordView = "RECORD_VIEW";
 
             /// <summary>
-            /// (紀錄) 導出
+            /// 紀錄-導出
             /// </summary>
             public const string RecordExport = "RECORD_EXPORT";
+
+            /// <summary>
+            /// 所有權限
+            /// </summary>
+            public static readonly string[] All =
+            [
+                RoleView,
+                RoleEdit,
+                AdminView,
+                AdminEdit,
+                RecordView,
+                RecordExport
+            ];
         }
     }
 }

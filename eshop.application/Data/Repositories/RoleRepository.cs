@@ -1,4 +1,5 @@
 using Dapper;
+using eshop.application.Data.IRepositories;
 using eshop.application.DTO.Responses.Admin;
 using eshop.application.DTO.Responses.Role;
 using System.Data.Common;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace eshop.application.Data.Repositories
 {
-    public class RoleRepository : BaseRepository
+    public class RoleRepository : BaseRepository, IRoleRepository
     {
         private readonly ILogger<RoleRepository> _logger;
 
@@ -141,7 +142,7 @@ namespace eshop.application.Data.Repositories
             var sql = @"
                 SELECT
                     id AS PermissionId,
-                    name AS PermissionName
+                    code AS PermissionCode
                 FROM `permission`
                 ORDER BY id ASC;
             ";
@@ -157,7 +158,7 @@ namespace eshop.application.Data.Repositories
         public async Task<List<string>> GetAdminIdRolePermissionListAsync(int adminId)
         {
             var sql = @"
-                SELECT p.name AS PermissionName
+                SELECT p.code
                 FROM `admin` a
                 JOIN `role_permission` rp ON a.role_id = rp.role_id
                 JOIN `permission` p ON rp.permission_id = p.id

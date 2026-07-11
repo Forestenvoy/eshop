@@ -20,7 +20,6 @@ namespace eshop.application.Configurations
         public static void Init()
         {
             RegisterTypeMaps();
-            RegisterTypeHandlers();
 
             Log.Information("DapperBootstrap initialized.");
         }
@@ -46,17 +45,6 @@ namespace eshop.application.Configurations
 
                 SqlMapper.SetTypeMap(type, (SqlMapper.ITypeMap)mapper!);
             }
-        }
-
-        /// <summary>
-        /// 註冊 Dapper 自訂型別轉換器
-        /// </summary>
-        /// <remarks>
-        /// <para>用於處理非標準型別</para>
-        /// </remarks>
-        private static void RegisterTypeHandlers()
-        {
-
         }
     }
 }

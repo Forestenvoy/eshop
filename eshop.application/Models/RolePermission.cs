@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace eshop.application.Models
 {
     /// <summary>
@@ -5,11 +7,6 @@ namespace eshop.application.Models
     /// </summary>
     public class RolePermission
     {
-        /// <summary>
-        /// 對應 ID
-        /// </summary>
-        public int Id { get; set; }
-
         /// <summary>
         /// 角色 ID
         /// </summary>
@@ -23,11 +20,13 @@ namespace eshop.application.Models
         /// <summary>
         /// 建立時間
         /// </summary>
+        [Column("created_at")]
         public DateTime CreatedAt { get; set; }
 
         /// <summary>
-        /// 最後更新時間
+        /// 修改時間
         /// </summary>
+        [Column("updated_at")]
         public DateTime UpdatedAt { get; set; }
     }
 }

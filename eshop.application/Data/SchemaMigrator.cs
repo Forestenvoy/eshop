@@ -46,8 +46,8 @@ namespace eshop.application.Data
                     `id` INT NOT NULL AUTO_INCREMENT,
                     `name` VARCHAR(50) NOT NULL,
                     `modifier` VARCHAR(50) NULL,
-                    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                     PRIMARY KEY (`id`),
                     UNIQUE KEY `uk_role_name` (`name`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
@@ -66,11 +66,11 @@ namespace eshop.application.Data
             await connection.ExecuteAsync(new CommandDefinition(@"
                 CREATE TABLE `permission` (
                     `id` INT NOT NULL AUTO_INCREMENT,
-                    `name` VARCHAR(100) NOT NULL,
-                    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    `code` VARCHAR(100) NOT NULL,
+                    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                     PRIMARY KEY (`id`),
-                    UNIQUE KEY `uk_permission_name` (`name`)
+                    UNIQUE KEY `uk_permission_code` (`code`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
                 cancellationToken: ct));
 
@@ -86,15 +86,13 @@ namespace eshop.application.Data
 
             await connection.ExecuteAsync(new CommandDefinition(@"
                 CREATE TABLE `role_permission` (
-                    `id` INT NOT NULL AUTO_INCREMENT,
                     `role_id` INT NOT NULL,
                     `permission_id` INT NOT NULL,
-                    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                    PRIMARY KEY (`id`),
-                    UNIQUE KEY `uk_role_permission` (`role_id`, `permission_id`),
-                    CONSTRAINT `fk_role_permission_role` FOREIGN KEY (`role_id`) REFERENCES `role`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                    CONSTRAINT `fk_role_permission_permission` FOREIGN KEY (`permission_id`) REFERENCES `permission`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+                    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    PRIMARY KEY (`role_id`, `permission_id`),
+                    CONSTRAINT `fk_role_permission_role` FOREIGN KEY (`role_id`) REFERENCES `role`(`id`) ON DELETE CASCADE,
+                    CONSTRAINT `fk_role_permission_permission` FOREIGN KEY (`permission_id`) REFERENCES `permission`(`id`) ON DELETE CASCADE
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
                 cancellationToken: ct));
 
@@ -116,11 +114,11 @@ namespace eshop.application.Data
                     `role_id` INT NULL,
                     `is_enable` BOOLEAN DEFAULT TRUE,
                     `modifier` VARCHAR(50) NULL,
-                    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                     PRIMARY KEY (`id`),
-                    UNIQUE KEY `uk_admin_account` (`account`),
-                    CONSTRAINT `fk_admin_role` FOREIGN KEY (`role_id`) REFERENCES `role`(`id`) ON DELETE SET NULL ON UPDATE CASCADE
+                    UNIQUE KEY `uk_admin` (`account`),
+                    CONSTRAINT `fk_admin_role` FOREIGN KEY (`role_id`) REFERENCES `role`(`id`) ON DELETE SET NULL
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
                 cancellationToken: ct));
 

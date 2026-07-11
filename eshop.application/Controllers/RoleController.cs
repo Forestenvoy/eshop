@@ -29,7 +29,7 @@ namespace eshop.application.Controllers
         /// <summary>
         /// 角色列表
         /// </summary>
-        [Authorize(Policy = AuthConstants.PermissionClaim.RoleView)]
+        [Authorize(Policy = AuthConstants.Permission.RoleView)]
         [HttpGet("list")]
         [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponsePagingDataModel<RoleListResponse>))]
         public async Task<IActionResult> ListAsync(
@@ -43,7 +43,7 @@ namespace eshop.application.Controllers
         /// <summary>
         /// 所有權限列表
         /// </summary>
-        [Authorize(Policy = AuthConstants.PermissionClaim.RoleView)]
+        [Authorize(Policy = AuthConstants.Permission.RoleView)]
         [HttpGet("permissions")]
         [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseDataModel<List<PermissionListResponse>>))]
         public async Task<IActionResult> PermissionsAsync()
@@ -54,7 +54,7 @@ namespace eshop.application.Controllers
         /// <summary>
         /// 角色名稱與擁有權限
         /// </summary>
-        [Authorize(Policy = AuthConstants.PermissionClaim.RoleView)]
+        [Authorize(Policy = AuthConstants.Permission.RoleView)]
         [HttpGet("detail")]
         [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseDataModel<RoleResponse>))]
         public async Task<IActionResult> DetailAsync([FromQuery] int roleId)
@@ -65,7 +65,7 @@ namespace eshop.application.Controllers
         /// <summary>
         /// 新增角色
         /// </summary>
-        [Authorize(Policy = AuthConstants.PermissionClaim.RoleEdit)]
+        [Authorize(Policy = AuthConstants.Permission.RoleEdit)]
         [HttpPost("create")]
         [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseModel))]
         public async Task<IActionResult> CreateAsync([FromBody] RoleAddRequest request)
@@ -76,7 +76,7 @@ namespace eshop.application.Controllers
         /// <summary>
         /// 修改角色
         /// </summary>
-        [Authorize(Policy = AuthConstants.PermissionClaim.RoleEdit)]
+        [Authorize(Policy = AuthConstants.Permission.RoleEdit)]
         [HttpPost("update")]
         [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseModel))]
         public async Task<IActionResult> UpdateAsync([FromBody] RoleUpdateRequest request)
@@ -87,7 +87,7 @@ namespace eshop.application.Controllers
         /// <summary>
         /// 刪除角色
         /// </summary>
-        [Authorize(Policy = AuthConstants.PermissionClaim.RoleEdit)]
+        [Authorize(Policy = AuthConstants.Permission.RoleEdit)]
         [HttpPost("delete")]
         [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseModel))]
         public async Task<IActionResult> DeleteAsync([Required][FromBody] int roleId)

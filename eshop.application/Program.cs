@@ -26,19 +26,28 @@ try
         .AddNewtonsoftJson(option =>
         {
             option.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
-            option.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
         })
         .ConfigureApiBehaviorOptions(option =>
         {
+            // 保留 ModelState 自動驗證
             option.SuppressModelStateInvalidFilter = false;
+
+            // 關閉 ASP.NET Core 預設 ProblemDetails 格式
             option.SuppressMapClientErrors = true;
+
+            // 自訂 Model Validation Error Response
             option.InvalidModelStateResponseFactory = actionContext =>
             {
-                var msg = actionContext.ModelState
-                    .FirstOrDefault(o => o.Value?.ValidationState == ModelValidationState.Invalid)
-                    .Key ?? string.Empty;
+                var errors = actionContext.ModelState
+                    .Where(x => x.Value?.Errors.Count > 0)
+                    .Select(x => x.Key)
+                    .ToList();
 
-                return new BadRequestObjectResult(new { code = ResponseCode.BAD_PARAMS, msg });
+                var message = errors.Count > 0
+                    ? string.Join(", ", errors)
+                    : ResponseMessage.INVALID_PARAMETERS;
+
+                return new OkObjectResult(ApiResponse.Fail(ResponseCode.INVALID_PARAMS, message));
             };
         });
 

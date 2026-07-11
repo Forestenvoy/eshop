@@ -5,8 +5,8 @@ namespace eshop.application.DTO.Responses.Role
         public int PermissionId { get; set; }
 
         /// <summary>
-        /// 權限名稱
+        /// 權限代碼
         /// </summary>
-        public string PermissionName { get; set; } = string.Empty;
+        public string PermissionCode { get; set; } = string.Empty;
     }
 }

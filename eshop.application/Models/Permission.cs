@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace eshop.application.Models
 {
     /// <summary>
@@ -13,16 +15,18 @@ namespace eshop.application.Models
         /// <summary>
         /// 權限代碼
         /// </summary>
-        public string Name { get; set; } = string.Empty;
+        public string Code { get; set; } = default!;
 
         /// <summary>
         /// 建立時間
         /// </summary>
+        [Column("created_at")]
         public DateTime CreatedAt { get; set; }
 
         /// <summary>
-        /// 最後更新時間
+        /// 修改時間
         /// </summary>
+        [Column("created_at")]
         public DateTime UpdatedAt { get; set; }
     }
 }

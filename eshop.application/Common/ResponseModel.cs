@@ -3,6 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace eshop.application.Common
 {
+    /// <summary>
+    /// API 基本回應模型
+    /// </summary>
     public class ResponseModel
     {
         /// <summary>
@@ -19,16 +22,8 @@ namespace eshop.application.Common
         [JsonPropertyName("msg")]
         public string? Message { get; set; }
 
-        public ResponseModel() { }
-
         [SetsRequiredMembers]
-        public ResponseModel(ResponseCode code)
-        {
-            Code = code;
-        }
-
-        [SetsRequiredMembers]
-        public ResponseModel(ResponseCode code, string message)
+        public ResponseModel(ResponseCode code, string? message = null)
         {
             Code = code;
             Message = message;

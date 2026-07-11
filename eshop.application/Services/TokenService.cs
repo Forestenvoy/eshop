@@ -21,7 +21,7 @@ namespace eshop.application.Services
         /// <summary>
         /// 產生後台管理員 Token
         /// </summary>
-        public string GenerateAdminToken(string account, IEnumerable<string> permissions, TimeSpan ttl)
+        public string GenerateAdminToken(string account, IEnumerable<string> permissionCodes, TimeSpan ttl)
         {
             string jwtSecret = _configuration.GetValue<string>("Token:Secret")
                 ?? throw new InvalidOperationException("JWT Secret is not configured.");
@@ -42,14 +42,14 @@ namespace eshop.application.Services
             var claims = new List<Claim>
             {
                 new(AuthConstants.Claim.TokenType, TokenTypeEnum.Admin.ToString()),
-                new(AuthConstants.Claim.AdminAccount, account),
+                new(AuthConstants.Claim.Admin, account),
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new(JwtRegisteredClaimNames.Iat, new DateTimeOffset(now).ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
             };
 
-            foreach (var permission in permissions)
+            foreach (var permissionCode in permissionCodes)
             {
-                claims.Add(new Claim(AuthConstants.Claim.Permission, permission));
+                claims.Add(new Claim(AuthConstants.Claim.Permission, permissionCode));
             }
 
             var jwt = new JwtSecurityToken(

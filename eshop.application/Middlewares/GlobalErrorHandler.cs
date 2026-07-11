@@ -51,7 +51,7 @@ namespace eshop.application.Middlewares
             context.Response.StatusCode = StatusCodes.Status200OK;
             context.Response.ContentType = MediaTypeNames.Application.Json;
 
-            var responseModel = new ResponseModel(ResponseCode.ERROR, ResponseMessage.SYSTEM_ERROR);
+            var responseModel = ApiResponse.Fail(ResponseCode.ERROR, ResponseMessage.ERROR);
 
             await context.Response.WriteAsync(JsonConvert.SerializeObject(responseModel, JsonSetting.CamelCase));
         }

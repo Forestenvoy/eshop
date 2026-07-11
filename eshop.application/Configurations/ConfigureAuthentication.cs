@@ -79,10 +79,10 @@ namespace eshop.application.Configurations
 
                         var responseModel =
                             context.AuthenticateFailure is SecurityTokenExpiredException
-                                ? new ResponseModel(ResponseCode.TOKEN_EXPIRED)
+                                ? ApiResponse.Fail(ResponseCode.TOKEN_EXPIRED)
                                 : context.Error == "invalid_token"
-                                    ? new ResponseModel(ResponseCode.TOKEN_INVALID)
-                                    : new ResponseModel(ResponseCode.NO_LOGIN);
+                                    ? ApiResponse.Fail(ResponseCode.TOKEN_INVALID)
+                                    : ApiResponse.Fail(ResponseCode.NO_LOGIN);
 
                         return context.Response.WriteAsync(
                             JsonConvert.SerializeObject(responseModel)
@@ -94,7 +94,7 @@ namespace eshop.application.Configurations
                         context.Response.StatusCode = StatusCodes.Status200OK;
                         context.Response.ContentType = MediaTypeNames.Application.Json;
 
-                        var responseModel = new ResponseModel(ResponseCode.FORBID);
+                        var responseModel = ApiResponse.Fail(ResponseCode.FORBID);
 
                         return context.Response.WriteAsync(
                             JsonConvert.SerializeObject(responseModel)
@@ -110,7 +110,7 @@ namespace eshop.application.Configurations
             services.AddAuthorization(options =>
             {
                 // 由 Permission constants 自動註冊 policy，每個 permission 對應一個 policy
-                var permissions = typeof(AuthConstants.PermissionClaim)
+                var permissions = typeof(AuthConstants.Permission)
                     .GetFields(BindingFlags.Public | BindingFlags.Static)
                     .Select(f => f.GetValue(null)?.ToString())
                     .Where(p => !string.IsNullOrEmpty(p));

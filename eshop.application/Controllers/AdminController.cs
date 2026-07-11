@@ -36,7 +36,7 @@ namespace eshop.application.Controllers
         {
             if (string.IsNullOrWhiteSpace(req.Account) || string.IsNullOrWhiteSpace(req.Password))
             {
-                return Ok(new ResponseDataModel<string>(ResponseCode.BAD_PARAMS));
+                return Ok(ApiResponse.Fail<string>(ResponseCode.INVALID_PARAMS));
             }
 
             return Ok(await _adminService.AdminLoginAsync(req.Account, req.Password));
@@ -58,7 +58,7 @@ namespace eshop.application.Controllers
         /// <param name="keyword">帳號 關鍵字</param>
         /// <param name="pageIndex">頁碼</param>
         /// <param name="pageSize">筆數</param>
-        [Authorize(Policy = AuthConstants.PermissionClaim.AdminView)]
+        [Authorize(Policy = AuthConstants.Permission.AdminView)]
         [HttpGet("list")]
         [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponsePagingDataModel<AdminListResponse>))]
         public async Task<IActionResult> ListAsync(
@@ -73,7 +73,7 @@ namespace eshop.application.Controllers
         /// 取得單一帳號資料
         /// </summary>
         /// <param name="adminId">帳號 ID</param>
-        [Authorize(Policy = AuthConstants.PermissionClaim.AdminView)]
+        [Authorize(Policy = AuthConstants.Permission.AdminView)]
         [HttpGet("detail")]
         [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseDataModel<AdminResponse>))]
         public async Task<IActionResult> DetailAsync([Required][FromQuery] int adminId)
@@ -84,7 +84,7 @@ namespace eshop.application.Controllers
         /// <summary>
         /// 角色清單（下拉式選單用）
         /// </summary>
-        [Authorize(Policy = AuthConstants.PermissionClaim.AdminView)]
+        [Authorize(Policy = AuthConstants.Permission.AdminView)]
         [HttpGet("roles")]
         [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseDataModel<List<RoleIdNameResponse>>))]
         public async Task<IActionResult> RolesAsync()
@@ -95,7 +95,7 @@ namespace eshop.application.Controllers
         /// <summary>
         /// 新增帳號
         /// </summary>
-        [Authorize(Policy = AuthConstants.PermissionClaim.AdminEdit)]
+        [Authorize(Policy = AuthConstants.Permission.AdminEdit)]
         [HttpPost("create")]
         [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseModel))]
         public async Task<IActionResult> CreateAsync([FromBody] AdminAddRequest request)
@@ -106,7 +106,7 @@ namespace eshop.application.Controllers
         /// <summary>
         /// 編輯帳號
         /// </summary>
-        [Authorize(Policy = AuthConstants.PermissionClaim.AdminEdit)]
+        [Authorize(Policy = AuthConstants.Permission.AdminEdit)]
         [HttpPost("update")]
         [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseModel))]
         public async Task<IActionResult> UpdateAsync([FromBody] AdminUpdateRequest request)
@@ -117,7 +117,7 @@ namespace eshop.application.Controllers
         /// <summary>
         /// 刪除帳號
         /// </summary>
-        [Authorize(Policy = AuthConstants.PermissionClaim.AdminEdit)]
+        [Authorize(Policy = AuthConstants.Permission.AdminEdit)]
         [HttpPost("delete")]
         [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseModel))]
         public async Task<IActionResult> DeleteAsync([Required][FromBody] int adminId)

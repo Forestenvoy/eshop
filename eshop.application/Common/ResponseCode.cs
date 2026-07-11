@@ -8,9 +8,9 @@
         SUCCESS = 1,
 
         /// <summary>
-        /// 非法參數
+        /// 失敗
         /// </summary>
-        BAD_PARAMS = -1,
+        FAIL = -1,
 
         /// <summary>
         /// 系統錯誤
@@ -18,9 +18,9 @@
         ERROR = -2,
 
         /// <summary>
-        /// 失敗
+        /// 非法參數
         /// </summary>
-        FAIL = -3,
+        INVALID_PARAMS = -3,
 
         /// <summary>
         /// 未登入
