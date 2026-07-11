@@ -1,6 +1,8 @@
-using eshop.application.Common;
-using eshop.application.Data.IRepositories;
-using eshop.application.DTO.Responses.Role;
+using eshop.application.Common.Models;
+using eshop.application.DTOs.Role.Request;
+using eshop.application.DTOs.Role.Response;
+using eshop.application.Models.Admin;
+using eshop.application.Repositories.Admin.Interfaces;
 
 namespace eshop.application.Services
 {
@@ -16,77 +18,147 @@ namespace eshop.application.Services
         }
 
         /// <summary>
-        /// 角色列表（分頁）
+        /// 角色清單（下拉式選單用）
         /// </summary>
-        public async Task<ResponsePagingDataModel<RoleListResponse>> GetListAsync(string? keyword, int pageIndex, int pageSize)
+        /// <returns></returns>
+        public async Task<ResponseDataModel<List<SimpleResponse>>> GetOptionsAsync()
         {
-            var roleList = await _roleRepository.GetRoleListAsync(keyword, pageIndex, pageSize);
-            return ApiResponse.Paging(roleList.count, roleList.list);
+            var roles = await _roleRepository.GetAllAsync();
+
+            var responses = roles.Select(role => new SimpleResponse
+            {
+                RoleId = role.Id,
+                Name = role.Name
+            }).ToList();
+
+            return ApiResponse.Success(responses);
+        }
+
+        /// <summary>
+        /// 所有權限列表
+        /// </summary>
+        public async Task<ResponseDataModel<List<PermissionResponse>>> GetPermissionsAsync()
+        {
+            var permissions = await _roleRepository.GetAllPermissionsAsync();
+
+            var responses = permissions.Select(permission => new PermissionResponse
+            {
+                Id = permission.Id,
+                Code = permission.Code
+            }).ToList();
+
+            return ApiResponse.Success(responses);
         }
 
         /// <summary>
         /// 角色名稱與擁有權限
         /// </summary>
-        public async Task<ResponseDataModel<RoleResponse?>> GetDetailAsync(int roleId)
+        public async Task<ResponseDataModel<DetailResponse>> GetAsync(int roleId)
         {
-            var roleDetail = await _roleRepository.GetRoleDetailAsync(roleId);
-            return ApiResponse.Success(roleDetail);
+            var role = await _roleRepository.GetAsync(roleId);
+            if (role == null)
+            {
+                return ApiResponse.Fail<DetailResponse>(ResponseCode.ROLE_NOT_EXISTS);
+            }
+
+            var permissionIds = await _roleRepository.GetPermissionIdsAsync(roleId);
+
+            var response = new DetailResponse
+            {
+                RoleName = role.Name,
+                PermissionIds = permissionIds
+            };
+
+            return ApiResponse.Success(response);
+        }
+
+        /// <summary>
+        /// 角色列表（分頁）
+        /// </summary>
+        public async Task<ResponsePagingDataModel<RoleResponse>> GetListAsync(string? keyword, int pageIndex, int pageSize)
+        {
+            var count = await _roleRepository.GetCountAsync(keyword);
+            var list = await _roleRepository.GetPagedListAsync(keyword, pageIndex, pageSize);
+
+            var responses = list.Select(role => new RoleResponse
+            {
+                RoleId = role.Id,
+                Name = role.Name,
+                Modifier = role.Modifier,
+                UpdatedAt = role.UpdatedAt
+            });
+
+            return ApiResponse.Paging(count, responses);
         }
 
         /// <summary>
         /// 新增角色
         /// </summary>
-        public async Task<ResponseModel> Add(string? account, string roleName, List<int> permissionIds)
+        public async Task<ResponseModel> CreateAsync(string adminName, AddRequest request)
         {
-            if (string.IsNullOrWhiteSpace(account))
+            if (await _roleRepository.ExistsByNameAsync(request.RoleName))
             {
-                return ApiResponse.Fail(ResponseCode.ADMIN_NOT_EXISTS);
+                return ApiResponse.Fail(ResponseCode.ROLE_EXISTS);
             }
 
-            await _roleRepository.AddAsync(account, roleName, permissionIds);
+            var role = new Role
+            {
+                Name = request.RoleName,
+                Modifier = adminName
+            };
+
+            await _roleRepository.AddAsync(role, request.PermissionIds.Distinct().ToList());
+
+            // 管理日誌
+            _logger.LogInformation("角色新增成功");
+
             return ApiResponse.Success();
         }
 
         /// <summary>
         /// 修改角色
         /// </summary>
-        public async Task<ResponseModel> Update(string? account, int roleId, string roleName, List<int> permissionIds)
+        public async Task<ResponseModel> UpdateAsync(string adminName, UpdateRequest request)
         {
-            if (string.IsNullOrWhiteSpace(account))
-            {
-                return ApiResponse.Fail(ResponseCode.ADMIN_NOT_EXISTS);
-            }
-
-            if (!await _roleRepository.CheckRoleExistsAsync(roleId))
+            var existingRole = await _roleRepository.GetAsync(request.RoleId);
+            if (existingRole == null)
             {
                 return ApiResponse.Fail(ResponseCode.ROLE_NOT_EXISTS);
             }
 
-            await _roleRepository.UpdateAsync(account, roleId, roleName, permissionIds);
+            var role = new Role
+            {
+                Id = request.RoleId,
+                Name = string.IsNullOrWhiteSpace(request.RoleName) ? existingRole.Name : request.RoleName,
+                Modifier = adminName
+            };
+
+            await _roleRepository.UpdateAsync(role, request.PermissionIds.Distinct().ToList());
+
+            // 管理日誌
+            _logger.LogInformation("角色編輯成功");
+
             return ApiResponse.Success();
         }
 
         /// <summary>
         /// 刪除角色
         /// </summary>
-        public async Task<ResponseModel> DeleteRole(int roleId)
+        public async Task<ResponseModel> DeleteAsync(DeleteRequest request)
         {
-            if (!await _roleRepository.CheckRoleExistsAsync(roleId))
+            var ids = request.Ids;
+
+            if (ids == null || ids.Count == 0)
             {
                 return ApiResponse.Success();
             }
 
-            await _roleRepository.DeleteRoleAsync(roleId);
-            return ApiResponse.Success();
-        }
+            await _roleRepository.RemoveRangeAsync(ids);
 
-        /// <summary>
-        /// 所有權限列表
-        /// </summary>
-        public async Task<ResponseDataModel<List<PermissionListResponse>>> GetPermissionListAsync()
-        {
-            var permissionList = await _roleRepository.GetPermissionListAsync();
-            return ApiResponse.Success(permissionList);
+            // 管理日誌
+            _logger.LogInformation("角色刪除成功");
+
+            return ApiResponse.Success();
         }
     }
 }

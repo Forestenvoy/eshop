@@ -1,6 +1,6 @@
 ﻿using eshop.application.Data;
-using eshop.application.Data.IRepositories;
-using eshop.application.Data.Repositories;
+using eshop.application.Repositories.Admin;
+using eshop.application.Repositories.Admin.Interfaces;
 using MySqlConnector;
 using Serilog;
 using System.Data.Common;
@@ -43,7 +43,7 @@ namespace eshop.application.Configurations
         /// </summary>
         private static IServiceCollection AddRepositories(this IServiceCollection services)
         {
-            services.AddScoped<IAdminRepository, AdminRepository>();
+            services.AddScoped<IAdminUserRepository, AdminUserRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
 
             return services;

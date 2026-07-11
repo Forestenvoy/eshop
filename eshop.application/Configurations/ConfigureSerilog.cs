@@ -1,5 +1,4 @@
 using Serilog;
-using Serilog.Events;
 using Serilog.Enrichers.WithCaller;
 
 namespace eshop.application.Configurations
@@ -20,13 +19,11 @@ namespace eshop.application.Configurations
 
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(configuration)
-                .MinimumLevel.Information()
                 .Enrich.WithProperty("AppName", applicationName)
                 .Enrich.WithCaller()
                 .WriteTo.Debug()
                 .WriteTo.Console(
-                    outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}",
-                    levelSwitch: new Serilog.Core.LoggingLevelSwitch(LogEventLevel.Information)
+                    outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}"
                 )
                 .CreateLogger();
         }

@@ -16,9 +16,14 @@ namespace eshop.application.Common
             public const string TokenType = "TT";
 
             /// <summary>
-            /// 管理員
+            /// 管理員ID
             /// </summary>
-            public const string Admin = "A";
+            public const string AdminId = "AID";
+
+            /// <summary>
+            /// 管理員名稱
+            /// </summary>
+            public const string AdminName = "ANE";
 
             /// <summary>
             /// 權限代碼
@@ -35,6 +40,11 @@ namespace eshop.application.Common
             /// 後台專用
             /// </summary>
             public const string AdminOnly = "AdminOnly";
+
+            /// <summary>
+            /// 前台專用
+            /// </summary>
+            public const string WebOnly = "WebOnly";
         }
 
         /// <summary>

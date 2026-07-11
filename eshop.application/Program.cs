@@ -1,4 +1,4 @@
-using eshop.application.Common;
+using eshop.application.Common.Models;
 using eshop.application.Configurations;
 using eshop.application.Middlewares;
 using Microsoft.AspNetCore.Mvc;

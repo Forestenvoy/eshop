@@ -1,6 +1,6 @@
 using Dapper;
 using eshop.application.Common;
-using eshop.application.Models;
+using eshop.application.Models.Admin;
 using Microsoft.AspNetCore.Identity;
 using MySqlConnector;
 using System.Data;
@@ -103,8 +103,8 @@ namespace eshop.application.Data
                 return;
             }
 
-            var admin = new Admin { Account = "admin" };
-            var hashedPassword = new PasswordHasher<Admin>().HashPassword(admin, "admin");
+            var admin = new AdminUser { Account = "admin" };
+            var hashedPassword = new PasswordHasher<AdminUser>().HashPassword(admin, "admin");
 
             await connection.ExecuteAsync(new CommandDefinition(@"
                 INSERT INTO `admin` (`account`, `password`, `role_id`, `is_enable`)

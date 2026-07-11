@@ -1,4 +1,5 @@
 ﻿using eshop.application.Common;
+using eshop.application.Common.Models;
 using Newtonsoft.Json;
 using System.Net.Mime;
 

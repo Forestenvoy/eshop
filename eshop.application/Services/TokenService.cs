@@ -1,4 +1,6 @@
 using eshop.application.Common;
+using eshop.application.Enums;
+using eshop.application.Models.Admin;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -21,7 +23,7 @@ namespace eshop.application.Services
         /// <summary>
         /// 產生後台管理員 Token
         /// </summary>
-        public string GenerateAdminToken(string account, IEnumerable<string> permissionCodes, TimeSpan ttl)
+        public string GenerateAdminToken(AdminUser adminUser, IEnumerable<string> permissionCodes, TimeSpan ttl)
         {
             string jwtSecret = _configuration.GetValue<string>("Token:Secret")
                 ?? throw new InvalidOperationException("JWT Secret is not configured.");
@@ -41,8 +43,9 @@ namespace eshop.application.Services
 
             var claims = new List<Claim>
             {
-                new(AuthConstants.Claim.TokenType, TokenTypeEnum.Admin.ToString()),
-                new(AuthConstants.Claim.Admin, account),
+                new(AuthConstants.Claim.TokenType, TokenType.Admin.ToString()),
+                new(AuthConstants.Claim.AdminId, adminUser.Id.ToString()),
+                new(AuthConstants.Claim.AdminName, adminUser.Account),
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new(JwtRegisteredClaimNames.Iat, new DateTimeOffset(now).ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
             };

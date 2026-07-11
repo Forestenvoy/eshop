@@ -13,12 +13,21 @@ namespace eshop.application.Common
         }
 
         /// <summary>
-        /// 取得目前登入的後台帳號
+        /// Get 管理員 ID
         /// </summary>
-        protected string GetAdminAccount()
+        protected int GetAdminId()
         {
-            var claim = User.Claims.FirstOrDefault(c => c.Type == AuthConstants.Claim.Admin);
-            return claim == null ? throw new UnauthorizedAccessException("AdminAccount claim is missing.") : claim.Value;
+            var claim = User.Claims.FirstOrDefault(c => c.Type == AuthConstants.Claim.AdminId);
+            return claim == null ? throw new UnauthorizedAccessException("AdminId claim is missing.") : int.Parse(claim.Value);
+        }
+
+        /// <summary>
+        /// Get 管理員名稱
+        /// </summary>
+        protected string GetAdminName()
+        {
+            var claim = User.Claims.FirstOrDefault(c => c.Type == AuthConstants.Claim.AdminName);
+            return claim == null ? throw new UnauthorizedAccessException("AdminId claim is missing.") : claim.Value;
         }
     }
 }

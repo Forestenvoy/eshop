@@ -1,3 +1,4 @@
+using eshop.application.Configurations.Swagger;
 using Microsoft.OpenApi;
 using System.Reflection;
 
@@ -54,6 +55,10 @@ namespace eshop.application.Configurations
                 {
                     options.IncludeXmlComments(xmlPath);
                 }
+
+                // 讓列舉的 XML 註解顯示在 Swagger schema 說明中
+                options.SchemaFilter<EnumSchemaFilter>(xmlPath);
+
             }).AddSwaggerGenNewtonsoftSupport();
 
             return services;

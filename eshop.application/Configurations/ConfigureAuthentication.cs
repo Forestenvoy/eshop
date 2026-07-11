@@ -1,4 +1,6 @@
 ﻿using eshop.application.Common;
+using eshop.application.Common.Models;
+using eshop.application.Enums;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.IdentityModel.Tokens;
@@ -127,8 +129,15 @@ namespace eshop.application.Configurations
                 // 後台專用
                 options.AddPolicy(AuthConstants.Policy.AdminOnly, policy =>
                 {
-                    policy.RequireClaim(AuthConstants.Claim.TokenType, TokenTypeEnum.Admin.ToString());
+                    policy.RequireClaim(AuthConstants.Claim.TokenType, TokenType.Admin.ToString());
                 });
+
+                // 前台專用
+                options.AddPolicy(AuthConstants.Policy.WebOnly, policy =>
+                {
+                    policy.RequireClaim(AuthConstants.Claim.TokenType, TokenType.Web.ToString());
+                });
+
             });
 
             return services;
