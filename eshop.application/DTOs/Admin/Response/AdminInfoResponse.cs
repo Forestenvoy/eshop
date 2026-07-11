@@ -1,6 +1,6 @@
 namespace eshop.application.DTOs.Admin.Response
 {
-    public class InfoResponse
+    public class AdminInfoResponse
     {
         /// <summary>
         /// 帳號

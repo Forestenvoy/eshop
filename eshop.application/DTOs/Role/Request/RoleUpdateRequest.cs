@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace eshop.application.DTOs.Role.Request
 {
-    public class UpdateRequest
+    public class RoleUpdateRequest
     {
         /// <summary>
         /// 角色 ID

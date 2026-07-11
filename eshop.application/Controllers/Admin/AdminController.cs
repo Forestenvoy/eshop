@@ -32,8 +32,8 @@ namespace eshop.application.Controllers.Admin
         /// </summary>
         [HttpPost("login")]
         [AllowAnonymous]
-        [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseDataModel<LoginResponse>))]
-        public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request)
+        [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseDataModel<AdminLoginResponse>))]
+        public async Task<IActionResult> LoginAsync([FromBody] AdminLoginRequest request)
         {
             return Ok(await _adminService.LoginAsync(request));
         }
@@ -42,7 +42,7 @@ namespace eshop.application.Controllers.Admin
         /// 查詢已登入管理員資訊
         /// </summary>
         [HttpGet("info")]
-        [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseDataModel<InfoResponse>))]
+        [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseDataModel<AdminInfoResponse>))]
         public async Task<IActionResult> GetInfoAsync()
         {
             return Ok(await _adminService.GetInfoAsync(GetAdminId()));
@@ -83,7 +83,7 @@ namespace eshop.application.Controllers.Admin
         [Authorize(Policy = AuthConstants.Permission.AdminEdit)]
         [HttpPost("create")]
         [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseModel))]
-        public async Task<IActionResult> CreateAsync([FromBody] AddRequest request)
+        public async Task<IActionResult> CreateAsync([FromBody] AdminAddRequest request)
         {
             return Ok(await _adminService.AddAsync(GetAdminName(), request));
         }
@@ -94,7 +94,7 @@ namespace eshop.application.Controllers.Admin
         [Authorize(Policy = AuthConstants.Permission.AdminEdit)]
         [HttpPost("update")]
         [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseModel))]
-        public async Task<IActionResult> UpdateAsync([FromBody] UpdateRequest request)
+        public async Task<IActionResult> UpdateAsync([FromBody] AdminUpdateRequest request)
         {
             return Ok(await _adminService.UpdateAsync(GetAdminName(), request));
         }
@@ -105,7 +105,7 @@ namespace eshop.application.Controllers.Admin
         [Authorize(Policy = AuthConstants.Permission.AdminEdit)]
         [HttpPost("delete")]
         [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseModel))]
-        public async Task<IActionResult> DeleteAsync([FromBody] DeleteRequest request)
+        public async Task<IActionResult> DeleteAsync([FromBody] AdminDeleteRequest request)
         {
             return Ok(await _adminService.DeleteAsync(request));
         }

@@ -21,11 +21,11 @@ namespace eshop.application.Services
         /// 角色清單（下拉式選單用）
         /// </summary>
         /// <returns></returns>
-        public async Task<ResponseDataModel<List<SimpleResponse>>> GetOptionsAsync()
+        public async Task<ResponseDataModel<List<RoleSimpleResponse>>> GetOptionsAsync()
         {
             var roles = await _roleRepository.GetAllAsync();
 
-            var responses = roles.Select(role => new SimpleResponse
+            var responses = roles.Select(role => new RoleSimpleResponse
             {
                 RoleId = role.Id,
                 Name = role.Name
@@ -53,17 +53,17 @@ namespace eshop.application.Services
         /// <summary>
         /// 角色名稱與擁有權限
         /// </summary>
-        public async Task<ResponseDataModel<DetailResponse>> GetAsync(int roleId)
+        public async Task<ResponseDataModel<RoleDetailResponse>> GetAsync(int roleId)
         {
             var role = await _roleRepository.GetAsync(roleId);
             if (role == null)
             {
-                return ApiResponse.Fail<DetailResponse>(ResponseCode.ROLE_NOT_EXISTS);
+                return ApiResponse.Fail<RoleDetailResponse>(ResponseCode.ROLE_NOT_EXISTS);
             }
 
             var permissionIds = await _roleRepository.GetPermissionIdsAsync(roleId);
 
-            var response = new DetailResponse
+            var response = new RoleDetailResponse
             {
                 RoleName = role.Name,
                 PermissionIds = permissionIds
@@ -94,7 +94,7 @@ namespace eshop.application.Services
         /// <summary>
         /// 新增角色
         /// </summary>
-        public async Task<ResponseModel> CreateAsync(string adminName, AddRequest request)
+        public async Task<ResponseModel> CreateAsync(string adminName, RoleAddRequest request)
         {
             if (await _roleRepository.ExistsByNameAsync(request.RoleName))
             {
@@ -118,7 +118,7 @@ namespace eshop.application.Services
         /// <summary>
         /// 修改角色
         /// </summary>
-        public async Task<ResponseModel> UpdateAsync(string adminName, UpdateRequest request)
+        public async Task<ResponseModel> UpdateAsync(string adminName, RoleUpdateRequest request)
         {
             var existingRole = await _roleRepository.GetAsync(request.RoleId);
             if (existingRole == null)
@@ -144,7 +144,7 @@ namespace eshop.application.Services
         /// <summary>
         /// 刪除角色
         /// </summary>
-        public async Task<ResponseModel> DeleteAsync(DeleteRequest request)
+        public async Task<ResponseModel> DeleteAsync(RoleDeleteRequest request)
         {
             var ids = request.Ids;
 

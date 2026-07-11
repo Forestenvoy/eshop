@@ -2,7 +2,7 @@
 
 namespace eshop.application.DTOs.Admin.Request
 {
-    public class DeleteRequest
+    public class AdminDeleteRequest
     {
         /// <summary>
         /// 管理員 ID 清單

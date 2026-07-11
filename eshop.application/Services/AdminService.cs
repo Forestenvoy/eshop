@@ -31,32 +31,32 @@ namespace eshop.application.Services
         /// <summary>
         /// 管理員登入
         /// </summary>
-        public async Task<ResponseDataModel<LoginResponse>> LoginAsync(LoginRequest request)
+        public async Task<ResponseDataModel<AdminLoginResponse>> LoginAsync(AdminLoginRequest request)
         {
             // 查詢管理員
             var adminUser = await _adminUserRepository.GetAsync(request.Account);
             if (adminUser == null)
             {
-                return ApiResponse.Fail<LoginResponse>(ResponseCode.ACCOUNT_NOT_EXIST);
+                return ApiResponse.Fail<AdminLoginResponse>(ResponseCode.ACCOUNT_NOT_EXIST);
             }
 
             // 驗證密碼
             var verifyResult = _passwordHasher.VerifyHashedPassword(adminUser, adminUser.Password, request.Password);
             if (verifyResult == PasswordVerificationResult.Failed)
             {
-                return ApiResponse.Fail<LoginResponse>(ResponseCode.PASSWORD_ERROR);
+                return ApiResponse.Fail<AdminLoginResponse>(ResponseCode.PASSWORD_ERROR);
             }
 
             // 是否凍結
             if (!adminUser.IsEnabled)
             {
-                return ApiResponse.Fail<LoginResponse>(ResponseCode.ADMIN_DISABLED);
+                return ApiResponse.Fail<AdminLoginResponse>(ResponseCode.ADMIN_DISABLED);
             }
 
             var permissions = await _roleRepository.GetPermissionCodesByAdminAsync(adminUser.Id);
             string token = _tokenService.GenerateAdminToken(adminUser, permissions, TimeSpan.FromHours(24));
 
-            var response = new LoginResponse()
+            var response = new AdminLoginResponse()
             {
                 Token = token
             };
@@ -70,19 +70,19 @@ namespace eshop.application.Services
         /// <summary>
         /// 查詢已登入管理員資訊
         /// </summary>
-        public async Task<ResponseDataModel<InfoResponse>> GetInfoAsync(int adminId)
+        public async Task<ResponseDataModel<AdminInfoResponse>> GetInfoAsync(int adminId)
         {
             // 查詢管理員
             var adminUser = await _adminUserRepository.GetAsync(adminId);
             if (adminUser == null)
             {
-                return ApiResponse.Fail<InfoResponse>(ResponseCode.ADMIN_NOT_EXISTS);
+                return ApiResponse.Fail<AdminInfoResponse>(ResponseCode.ADMIN_NOT_EXISTS);
             }
 
             // 查詢權限
             var permissions = await _roleRepository.GetPermissionCodesByAdminAsync(adminUser.Id);
 
-            var response = new InfoResponse()
+            var response = new AdminInfoResponse()
             {
                 Account = adminUser.Account,
                 Permissions = permissions
@@ -138,7 +138,7 @@ namespace eshop.application.Services
         /// <summary>
         /// 新增帳號
         /// </summary>
-        public async Task<ResponseModel> AddAsync(string adminName, AddRequest request)
+        public async Task<ResponseModel> AddAsync(string adminName, AdminAddRequest request)
         {
             if (request.Password != request.PasswordConfirm)
             {
@@ -171,7 +171,7 @@ namespace eshop.application.Services
         /// <summary>
         /// 編輯帳號
         /// </summary>
-        public async Task<ResponseModel> UpdateAsync(string adminName, UpdateRequest request)
+        public async Task<ResponseModel> UpdateAsync(string adminName, AdminUpdateRequest request)
         {
             if (request.Password != request.PasswordConfirm)
             {
@@ -209,7 +209,7 @@ namespace eshop.application.Services
         /// <summary>
         /// 刪除帳號
         /// </summary>
-        public async Task<ResponseModel> DeleteAsync(DeleteRequest request)
+        public async Task<ResponseModel> DeleteAsync(AdminDeleteRequest request)
         {
             var ids = request.Ids;
 

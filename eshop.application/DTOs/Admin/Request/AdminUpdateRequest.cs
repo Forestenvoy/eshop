@@ -2,24 +2,22 @@ using System.ComponentModel.DataAnnotations;
 
 namespace eshop.application.DTOs.Admin.Request
 {
-    public class AddRequest
+    public class AdminUpdateRequest
     {
         /// <summary>
-        /// 帳號
+        /// 管理員 ID
         /// </summary>
         [Required]
-        public string Account { get; set; } = string.Empty;
+        public int AdminId { get; set; }
 
         /// <summary>
-        /// 密碼
+        /// 密碼（留空表示不更新）
         /// </summary>
-        [Required]
         public string Password { get; set; } = string.Empty;
 
         /// <summary>
         /// 密碼確認
         /// </summary>
-        [Required]
         public string PasswordConfirm { get; set; } = string.Empty;
 
         /// <summary>
@@ -27,5 +25,11 @@ namespace eshop.application.DTOs.Admin.Request
         /// </summary>
         [Required]
         public int RoleId { get; set; }
+
+        /// <summary>
+        /// 啟用狀態
+        /// </summary>
+        [Required]
+        public bool IsEnabled { get; set; }
     }
 }

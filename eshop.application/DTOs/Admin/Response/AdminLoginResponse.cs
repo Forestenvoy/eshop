@@ -1,6 +1,6 @@
 ﻿namespace eshop.application.DTOs.Admin.Response
 {
-    public class LoginResponse
+    public class AdminLoginResponse
     {
         /// <summary>
         /// JWT 驗證 Token，用於後續 API 請求的身分驗證

@@ -1,6 +1,6 @@
 namespace eshop.application.DTOs.Role.Response
 {
-    public class SimpleResponse
+    public class RoleSimpleResponse
     {
         /// <summary>
         /// 角色 ID

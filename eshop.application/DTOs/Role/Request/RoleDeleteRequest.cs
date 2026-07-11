@@ -3,7 +3,7 @@
     /// <summary>
     /// 刪除請求
     /// </summary>
-    public class DeleteRequest
+    public class RoleDeleteRequest
     {
         /// <summary>
         /// 角色 ID 清單

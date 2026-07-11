@@ -32,7 +32,7 @@ namespace eshop.application.Controllers.Admin
         /// </summary>
         [Authorize(Policy = AuthConstants.Permission.AdminView)]
         [HttpGet("options")]
-        [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseDataModel<List<SimpleResponse>>))]
+        [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseDataModel<List<RoleSimpleResponse>>))]
         public async Task<IActionResult> GetOptionsAsync()
         {
             return Ok(await _roleService.GetOptionsAsync());
@@ -54,7 +54,7 @@ namespace eshop.application.Controllers.Admin
         /// </summary>
         [Authorize(Policy = AuthConstants.Permission.RoleView)]
         [HttpGet]
-        [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseDataModel<DetailResponse>))]
+        [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseDataModel<RoleDetailResponse>))]
         public async Task<IActionResult> GetAsync([FromQuery] int roleId)
         {
             return Ok(await _roleService.GetAsync(roleId));
@@ -80,7 +80,7 @@ namespace eshop.application.Controllers.Admin
         [Authorize(Policy = AuthConstants.Permission.RoleEdit)]
         [HttpPost("create")]
         [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseModel))]
-        public async Task<IActionResult> CreateAsync([FromBody] AddRequest request)
+        public async Task<IActionResult> CreateAsync([FromBody] RoleAddRequest request)
         {
             return Ok(await _roleService.CreateAsync(GetAdminName(), request));
         }
@@ -91,7 +91,7 @@ namespace eshop.application.Controllers.Admin
         [Authorize(Policy = AuthConstants.Permission.RoleEdit)]
         [HttpPost("update")]
         [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseModel))]
-        public async Task<IActionResult> UpdateAsync([FromBody] UpdateRequest request)
+        public async Task<IActionResult> UpdateAsync([FromBody] RoleUpdateRequest request)
         {
             return Ok(await _roleService.UpdateAsync(GetAdminName(), request));
         }
@@ -102,7 +102,7 @@ namespace eshop.application.Controllers.Admin
         [Authorize(Policy = AuthConstants.Permission.RoleEdit)]
         [HttpPost("delete")]
         [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseModel))]
-        public async Task<IActionResult> DeleteAsync([FromBody] DeleteRequest request)
+        public async Task<IActionResult> DeleteAsync([FromBody] RoleDeleteRequest request)
         {
             return Ok(await _roleService.DeleteAsync(request));
         }

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace eshop.application.DTOs.Admin.Request
 {
-    public class LoginRequest
+    public class AdminLoginRequest
     {
         /// <summary>
         /// 帳號
