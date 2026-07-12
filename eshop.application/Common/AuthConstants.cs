@@ -29,6 +29,11 @@ namespace eshop.application.Common
             /// 權限代碼
             /// </summary>
             public const string Permission = "P";
+
+            /// <summary>
+            /// 會員ID
+            /// </summary>
+            public const string UserId = "UID";
         }
 
         /// <summary>
@@ -93,6 +98,16 @@ namespace eshop.application.Common
             public const string ProductEdit = "PRODUCT_EDIT";
 
             /// <summary>
+            /// 會員-檢視內容
+            /// </summary>
+            public const string UserView = "USER_VIEW";
+
+            /// <summary>
+            /// 會員-新增、編輯、停權、刪除
+            /// </summary>
+            public const string UserEdit = "USER_EDIT";
+
+            /// <summary>
             /// 所有權限
             /// </summary>
             public static readonly string[] All =
@@ -104,7 +119,9 @@ namespace eshop.application.Common
                 RecordView,
                 RecordExport,
                 ProductView,
-                ProductEdit
+                ProductEdit,
+                UserView,
+                UserEdit
             ];
         }
     }

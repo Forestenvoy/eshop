@@ -22,7 +22,10 @@ export default defineConfig(({ mode }) => {
         '/role': { target: env.VITE_API_BASE_URL, changeOrigin: true },
         '/product': { target: env.VITE_API_BASE_URL, changeOrigin: true },
         '/upload': { target: env.VITE_API_BASE_URL, changeOrigin: true },
+        '/file': { target: env.VITE_API_BASE_URL, changeOrigin: true },
         '/images': { target: env.VITE_API_BASE_URL, changeOrigin: true },
+        '/web': { target: env.VITE_API_BASE_URL, changeOrigin: true },
+        '/auth': { target: env.VITE_API_BASE_URL, changeOrigin: true },
       },
     },
   }

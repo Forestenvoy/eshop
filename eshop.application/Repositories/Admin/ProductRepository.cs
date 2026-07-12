@@ -119,7 +119,7 @@ namespace eshop.application.Repositories.Admin
                 SELECT *
                 FROM `product`
                 {whereSql}
-                ORDER BY `sort` ASC, `id` ASC
+                ORDER BY `sort` DESC, `id` ASC
                 LIMIT @Offset, @PageSize;
             ";
 

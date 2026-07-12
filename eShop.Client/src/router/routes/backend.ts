@@ -29,6 +29,11 @@ export const backendRoutes: RouteRecordRaw[] = [
             component: () => import('@/views/backend/RoleListView.vue'),
           },
           {
+            path: 'users',
+            name: 'backend-users',
+            component: () => import('@/views/backend/UserListView.vue'),
+          },
+          {
             path: 'products',
             name: 'backend-products',
             component: () => import('@/views/backend/ProductListView.vue'),

@@ -1,12 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { webRoutes } from './routes/web'
 import { backendRoutes } from './routes/backend'
-import { setupAuthGuard, setupBackendModeGuard } from './guards'
+import { setupAuthGuard, setupBackendModeGuard, setupMemberAuthGuard } from './guards'
 
 declare module 'vue-router' {
   interface RouteMeta {
     /** 是否需要登入後台管理員身分才能進入 */
     requiresAuth?: boolean
+    /** 是否需要登入前台會員身分才能進入 */
+    requiresMemberAuth?: boolean
   }
 }
 
@@ -17,5 +19,6 @@ const router = createRouter({
 
 setupAuthGuard(router)
 setupBackendModeGuard(router)
+setupMemberAuthGuard(router)
 
 export default router

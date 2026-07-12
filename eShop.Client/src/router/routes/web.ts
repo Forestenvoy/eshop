@@ -1,18 +1,39 @@
 import type { RouteRecordRaw } from 'vue-router'
-import HomeView from '@/views/HomeView.vue'
 
 export const webRoutes: RouteRecordRaw[] = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView,
+    component: () => import('@/components/web/WebLayout.vue'),
+    children: [
+      { path: '', name: 'home', component: () => import('@/views/web/HomeView.vue') },
+      {
+        path: 'product/:id',
+        name: 'web-product-detail',
+        component: () => import('@/views/web/ProductDetailView.vue'),
+      },
+      {
+        path: 'profile',
+        name: 'web-profile',
+        meta: { requiresMemberAuth: true },
+        component: () => import('@/views/web/ProfileView.vue'),
+      },
+      {
+        path: 'orders',
+        name: 'web-orders',
+        meta: { requiresMemberAuth: true },
+        component: () => import('@/views/web/OrdersView.vue'),
+      },
+      {
+        path: 'cart',
+        name: 'web-cart',
+        meta: { requiresMemberAuth: true },
+        component: () => import('@/views/web/CartView.vue'),
+      },
+    ],
   },
   {
     path: '/about',
     name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (About.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import('@/views/AboutView.vue'),
   },
 ]

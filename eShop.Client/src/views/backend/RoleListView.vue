@@ -90,12 +90,12 @@ onMounted(() => {
   </div>
 
   <el-table v-loading="loading" :data="rows" border style="width: 100%">
-    <el-table-column prop="name" label="角色名稱" />
-    <el-table-column prop="modifier" label="最後修改人" />
-    <el-table-column label="修改時間">
+    <el-table-column prop="name" label="角色名稱" align="center"/>
+    <el-table-column prop="modifier" label="操作人" align="center"/>
+    <el-table-column label="操作時間" align="center">
       <template #default="{ row }">{{ formatDateTime(row.updatedAt) }}</template>
     </el-table-column>
-    <el-table-column label="操作" width="160">
+    <el-table-column label="操作" width="160" align="center">
       <template #default="{ row }">
         <el-button size="small" @click="openEditDialog(row)">編輯</el-button>
         <el-button size="small" type="danger" @click="handleDelete(row)">刪除</el-button>

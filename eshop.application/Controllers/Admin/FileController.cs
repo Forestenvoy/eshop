@@ -12,7 +12,7 @@ namespace eshop.application.Controllers.Admin
     /// <summary>
     /// 檔案上傳
     /// </summary>
-    [Route("upload")]
+    [Route("file")]
     [Authorize(Policy = AuthConstants.Policy.AdminOnly)]
     [ApiExplorerSettings(GroupName = SwaggerConst.Admin)]
     public class FileController : BaseApiController
@@ -30,7 +30,7 @@ namespace eshop.application.Controllers.Admin
         /// </summary>
         /// <param name="file">圖片檔案(webp/jpg/png,大小上限 1MB)</param>
         [Authorize(Policy = AuthConstants.Permission.ProductEdit)]
-        [HttpPost("product")]
+        [HttpPost("upload/product")]
         [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseDataModel<FileUploadResponse>))]
         public async Task<IActionResult> UploadProductImageAsync(IFormFile file)
         {

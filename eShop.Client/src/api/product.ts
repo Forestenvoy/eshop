@@ -50,7 +50,7 @@ export async function uploadProductImageApi(file: File): Promise<string> {
   const formData = new FormData()
   formData.append('file', file)
 
-  const { data } = await http.post<ResponseDataModel<{ url: string }>>('/upload/product', formData)
+  const { data } = await http.post<ResponseDataModel<{ url: string }>>('/file/upload/product', formData)
   assertSuccess(data)
   return data.data!.url
 }

@@ -37,6 +37,9 @@ export enum ResponseCode {
   ADMINISTRATOR_CAN_NOT_DELETE = -104,
   ROLE_EXISTS = -105,
   PRODUCT_NOT_EXISTS = -106,
+  EMAIL_EXISTS = -107,
+  USER_NOT_EXISTS = -108,
+  USER_DISABLED = -109,
 }
 
 /** 找不到對照時 fallback 用後端回傳的 msg,或顯示通用訊息 */
@@ -57,4 +60,7 @@ export const CODE_MESSAGE_MAP: Partial<Record<ResponseCode, string>> = {
   [ResponseCode.ADMINISTRATOR_CAN_NOT_DELETE]: '系統總管帳號不可刪除',
   [ResponseCode.ROLE_EXISTS]: '角色已存在',
   [ResponseCode.PRODUCT_NOT_EXISTS]: '找不到該商品',
+  [ResponseCode.EMAIL_EXISTS]: 'Email 已被註冊',
+  [ResponseCode.USER_NOT_EXISTS]: '找不到該會員',
+  [ResponseCode.USER_DISABLED]: '該帳號已被停權',
 }

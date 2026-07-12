@@ -29,5 +29,14 @@ namespace eshop.application.Common
             var claim = User.Claims.FirstOrDefault(c => c.Type == AuthConstants.Claim.AdminName);
             return claim == null ? throw new UnauthorizedAccessException("AdminId claim is missing.") : claim.Value;
         }
+
+        /// <summary>
+        /// Get 會員 ID
+        /// </summary>
+        protected long GetUserId()
+        {
+            var claim = User.Claims.FirstOrDefault(c => c.Type == AuthConstants.Claim.UserId);
+            return claim == null ? throw new UnauthorizedAccessException("UserId claim is missing.") : long.Parse(claim.Value);
+        }
     }
 }

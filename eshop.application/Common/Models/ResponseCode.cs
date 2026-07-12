@@ -86,5 +86,20 @@
         /// 商品不存在
         /// </summary>
         PRODUCT_NOT_EXISTS = -106,
+
+        /// <summary>
+        /// Email 已被註冊
+        /// </summary>
+        EMAIL_EXISTS = -107,
+
+        /// <summary>
+        /// 會員不存在
+        /// </summary>
+        USER_NOT_EXISTS = -108,
+
+        /// <summary>
+        /// 會員已停權
+        /// </summary>
+        USER_DISABLED = -109,
     }
 }

@@ -26,6 +26,7 @@ function handleLogout() {
         <el-menu :default-active="route.path" router class="backend-menu">
           <el-menu-item index="/backend/admins">管理員管理</el-menu-item>
           <el-menu-item index="/backend/roles">角色管理</el-menu-item>
+          <el-menu-item index="/backend/users">用戶管理</el-menu-item>
           <el-menu-item index="/backend/products">商品管理</el-menu-item>
         </el-menu>
       </aside>

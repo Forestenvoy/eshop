@@ -22,6 +22,8 @@ namespace eshop.application.Data
             await CreateRolePermissionTableAsync(connection, logger, ct);
             await CreateAdminTableAsync(connection, logger, ct);
             await CreateProductTableAsync(connection, logger, ct);
+            await CreateUserTableAsync(connection, logger, ct);
+            await CreateBalanceTableAsync(connection, logger, ct);
         }
 
         private static async Task<bool> TableExistsAsync(MySqlConnection connection, string tableName, CancellationToken ct)
@@ -151,6 +153,57 @@ namespace eshop.application.Data
                 cancellationToken: ct));
 
             logger?.LogInformation("✅ Table 'product' created.");
+        }
+
+        private static async Task CreateUserTableAsync(MySqlConnection connection, ILogger? logger, CancellationToken ct)
+        {
+            if (await TableExistsAsync(connection, "user", ct))
+            {
+                return;
+            }
+
+            await connection.ExecuteAsync(new CommandDefinition(@"
+                CREATE TABLE `user` (
+                    `id` BIGINT NOT NULL AUTO_INCREMENT,
+                    `name` VARCHAR(100) NULL,
+                    `email` VARCHAR(255) NOT NULL,
+                    `password` VARCHAR(255) NOT NULL,
+                    `gender` TINYINT NOT NULL DEFAULT 0,
+                    `avatar` VARCHAR(500) NULL,
+                    `birthday` DATE NULL,
+                    `phone` VARCHAR(20) NULL,
+                    `address` VARCHAR(255) NULL,
+                    `status` TINYINT NOT NULL DEFAULT 1,
+                    `last_login_at` DATETIME NULL,
+                    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    PRIMARY KEY (`id`),
+                    UNIQUE KEY `uk_user_email` (`email`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+                cancellationToken: ct));
+
+            logger?.LogInformation("✅ Table 'user' created.");
+        }
+
+        private static async Task CreateBalanceTableAsync(MySqlConnection connection, ILogger? logger, CancellationToken ct)
+        {
+            if (await TableExistsAsync(connection, "balance", ct))
+            {
+                return;
+            }
+
+            await connection.ExecuteAsync(new CommandDefinition(@"
+                CREATE TABLE `balance` (
+                    `user_id` BIGINT NOT NULL,
+                    `amount` DECIMAL(12,2) NOT NULL DEFAULT 0,
+                    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    PRIMARY KEY (`user_id`),
+                    CONSTRAINT `fk_balance_user` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+                cancellationToken: ct));
+
+            logger?.LogInformation("✅ Table 'balance' created.");
         }
     }
 }

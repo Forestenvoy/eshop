@@ -21,6 +21,15 @@ namespace eshop.application.Services
         /// 上傳商品圖片
         /// </summary>
         public async Task<ResponseDataModel<FileUploadResponse>> UploadProductImageAsync(IFormFile file)
+            => await UploadImageAsync(file, "product", "商品圖片");
+
+        /// <summary>
+        /// 上傳大頭貼
+        /// </summary>
+        public async Task<ResponseDataModel<FileUploadResponse>> UploadAvatarAsync(IFormFile file)
+            => await UploadImageAsync(file, "avatar", "大頭貼");
+
+        private async Task<ResponseDataModel<FileUploadResponse>> UploadImageAsync(IFormFile file, string subFolder, string label)
         {
             if (file == null || file.Length == 0)
             {
@@ -50,15 +59,15 @@ namespace eshop.application.Services
             }
 
             var fileName = $"{Guid.NewGuid()}{extension}";
-            var folderPath = Path.Combine(_environment.WebRootPath, "images", "product");
+            var folderPath = Path.Combine(_environment.WebRootPath, "images", subFolder);
             Directory.CreateDirectory(folderPath);
 
             var filePath = Path.Combine(folderPath, fileName);
             await System.IO.File.WriteAllBytesAsync(filePath, bytes);
 
-            _logger.LogInformation("商品圖片上傳成功:{FileName}", fileName);
+            _logger.LogInformation("{Label}上傳成功:{FileName}", label, fileName);
 
-            var url = $"/images/product/{fileName}";
+            var url = $"/images/{subFolder}/{fileName}";
             return ApiResponse.Success(new FileUploadResponse { Url = url });
         }
 

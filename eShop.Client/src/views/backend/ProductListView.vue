@@ -142,7 +142,7 @@ onMounted(async () => {
         <el-link type="primary" @click="openEditDialog(row)">{{ row.name }}</el-link>
       </template>
     </el-table-column>
-    <el-table-column label="圖片" width="80">
+    <el-table-column label="圖片" width="80" align="center">
       <template #default="{ row }">
         <el-image
           v-if="row.imageUrl"
@@ -154,17 +154,17 @@ onMounted(async () => {
         <span v-else>—</span>
       </template>
     </el-table-column>
-    <el-table-column prop="price" label="價格" width="100" />
-    <el-table-column prop="stock" label="庫存" width="80" />
-    <el-table-column label="狀態" width="100">
+    <el-table-column prop="price" label="價格" width="100" align="center" />
+    <el-table-column prop="stock" label="庫存" width="80" align="center" />
+    <el-table-column label="狀態" width="100" align="center">
       <template #default="{ row }">
-        <el-button size="small" :type="row.isEnabled ? 'success' : 'danger'" @click="handleToggle(row)">
+        <el-button size="small" :type="row.isEnabled ? 'danger' : 'success'" @click="handleToggle(row)">
           {{ row.isEnabled ? '下架' : '上架' }}
         </el-button>
       </template>
     </el-table-column>
-    <el-table-column prop="modifier" label="操作人" width="120" />
-    <el-table-column label="操作時間">
+    <el-table-column prop="modifier" label="操作人" width="120" align="center" />
+    <el-table-column label="操作時間" align="center">
       <template #default="{ row }">{{ formatDateTime(row.updatedAt) }}</template>
     </el-table-column>
     <el-table-column label="" width="60" align="center">

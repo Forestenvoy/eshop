@@ -7,6 +7,8 @@ export interface JwtPayload {
   ANE?: string
   /** 權限代碼,後端可能簽發多個同名 claim,故為 string 或 string[] */
   P?: string | string[]
+  /** 會員 ID(前台會員 token 專用) */
+  UID?: string
   /** 過期時間(unix 秒) */
   exp?: number
 }

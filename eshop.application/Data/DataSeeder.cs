@@ -1,5 +1,7 @@
 using Dapper;
 using eshop.application.Common;
+using eshop.application.Enums;
+using eshop.application.Models;
 using eshop.application.Models.Admin;
 using Microsoft.AspNetCore.Identity;
 using MySqlConnector;
@@ -25,6 +27,7 @@ namespace eshop.application.Data
             await SeedRolePermissionAsync(connection, logger, ct);
             await SeedAdminAsync(connection, logger, ct);
             await SeedProductAsync(connection, logger, ct);
+            await SeedUserAsync(connection, logger, ct);
         }
 
         private static async Task<bool> HasDataAsync(IDbConnection connection, string tableName, CancellationToken ct)
@@ -161,6 +164,43 @@ namespace eshop.application.Data
                 cancellationToken: ct));
 
             logger?.LogInformation("✅ Inserted 10 default records into 'product'.");
+        }
+
+        private static async Task SeedUserAsync(IDbConnection connection, ILogger? logger, CancellationToken ct)
+        {
+            if (await HasDataAsync(connection, "user", ct))
+            {
+                logger?.LogInformation("✅ 'user' already has data, no insert needed.");
+                return;
+            }
+
+            var user = new User { Email = "test@example.com" };
+            var hashedPassword = new PasswordHasher<User>().HashPassword(user, "123456");
+
+            var userId = await connection.ExecuteScalarAsync<long>(new CommandDefinition(@"
+                INSERT INTO `user` (`name`, `email`, `password`, `gender`,`avatar`,`birthday`, `phone`, `address`, `status`)
+                VALUES (@Name, @Email, @Password, @Gender, @Avatar, @Birthday, @Phone, @Address, @Status);
+                SELECT LAST_INSERT_ID();",
+                new
+                {
+                    Name = "Test",
+                    user.Email,
+                    Password = hashedPassword,
+                    Gender = UserGender.Male,
+                    Avatar = "/images/avatar/example.jpg",
+                    Birthday = new DateTime(1999, 1, 1),
+                    Phone = "0912345678",
+                    Address = "台中市南屯區河南路四段1號",
+                    Status = UserStatus.Active,
+                },
+                cancellationToken: ct));
+
+            await connection.ExecuteAsync(new CommandDefinition(
+                "INSERT INTO `balance` (`user_id`, `amount`) VALUES (@UserId, @Amount);",
+                new { UserId = userId, Amount = 10000m },
+                cancellationToken: ct));
+
+            logger?.LogInformation("✅ Inserted default record into 'user' + 'balance'.");
         }
     }
 }

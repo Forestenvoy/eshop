@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { useIdentityStore } from '@/stores/identity'
+import { useMemberStore } from '@/stores/member'
 import { ResponseCode } from '@/types/api'
 import router from '@/router'
 
@@ -14,10 +15,23 @@ export const http = axios.create({
   timeout: 10000,
 })
 
+// 後台管理員與前台會員是兩套獨立的 token/身分(路徑前綴 /web/ 為前台會員 API),
+// 不能共用同一個 store,否則兩種身分的 token 會互相覆蓋。
+function isWebRequest(url?: string): boolean {
+  return !!url?.startsWith('/web/')
+}
+
 http.interceptors.request.use((config) => {
-  const identity = useIdentityStore()
-  if (identity.token) {
-    config.headers.Authorization = `Bearer ${identity.token}`
+  if (isWebRequest(config.url)) {
+    const member = useMemberStore()
+    if (member.token) {
+      config.headers.Authorization = `Bearer ${member.token}`
+    }
+  } else {
+    const identity = useIdentityStore()
+    if (identity.token) {
+      config.headers.Authorization = `Bearer ${identity.token}`
+    }
   }
   return config
 })
@@ -25,7 +39,7 @@ http.interceptors.request.use((config) => {
 http.interceptors.response.use(
   (response) => {
     // 後端「未登入 / token 過期 / token 無效」一律回 HTTP 200,只能從 body 的 code 判斷,
-    // 這裡集中攔截並強制登出、導回登入頁,避免每個畫面各自重複判斷同一件事。
+    // 這裡集中攔截並強制登出,避免每個畫面各自重複判斷同一件事。
     // 「這次操作到底失敗的原因是什麼」的訊息顯示,仍交給呼叫端的 assertSuccess()/showApiError() 處理。
     const code = (response.data as { code?: number } | undefined)?.code
     const isSessionInvalid =
@@ -33,13 +47,21 @@ http.interceptors.response.use(
       code === ResponseCode.TOKEN_EXPIRED ||
       code === ResponseCode.TOKEN_INVALID
     if (isSessionInvalid) {
-      const identity = useIdentityStore()
-      if (identity.token) {
-        identity.logout()
-        router.push({
-          path: '/backend/login',
-          query: { redirect: router.currentRoute.value.fullPath },
-        })
+      if (isWebRequest(response.config.url)) {
+        const member = useMemberStore()
+        if (member.token) {
+          member.logout()
+          ElMessage.warning('登入已逾期,請重新登入')
+        }
+      } else {
+        const identity = useIdentityStore()
+        if (identity.token) {
+          identity.logout()
+          router.push({
+            path: '/backend/login',
+            query: { redirect: router.currentRoute.value.fullPath },
+          })
+        }
       }
     }
     return response
