@@ -12,6 +12,8 @@ namespace eshop.application.Configurations
             services.AddSingleton<TokenService>();
             services.AddScoped<AdminService>();
             services.AddScoped<RoleService>();
+            services.AddScoped<ProductService>();
+            services.AddScoped<FileService>();
 
             return services;
         }

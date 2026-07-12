@@ -83,6 +83,16 @@ namespace eshop.application.Common
             public const string RecordExport = "RECORD_EXPORT";
 
             /// <summary>
+            /// 商品-檢視內容
+            /// </summary>
+            public const string ProductView = "PRODUCT_VIEW";
+
+            /// <summary>
+            /// 商品-新增、編輯、上下架
+            /// </summary>
+            public const string ProductEdit = "PRODUCT_EDIT";
+
+            /// <summary>
             /// 所有權限
             /// </summary>
             public static readonly string[] All =
@@ -92,7 +102,9 @@ namespace eshop.application.Common
                 AdminView,
                 AdminEdit,
                 RecordView,
-                RecordExport
+                RecordExport,
+                ProductView,
+                ProductEdit
             ];
         }
     }

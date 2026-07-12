@@ -21,6 +21,7 @@ namespace eshop.application.Data
             await CreatePermissionTableAsync(connection, logger, ct);
             await CreateRolePermissionTableAsync(connection, logger, ct);
             await CreateAdminTableAsync(connection, logger, ct);
+            await CreateProductTableAsync(connection, logger, ct);
         }
 
         private static async Task<bool> TableExistsAsync(MySqlConnection connection, string tableName, CancellationToken ct)
@@ -123,6 +124,33 @@ namespace eshop.application.Data
                 cancellationToken: ct));
 
             logger?.LogInformation("✅ Table 'admin' created.");
+        }
+
+        private static async Task CreateProductTableAsync(MySqlConnection connection, ILogger? logger, CancellationToken ct)
+        {
+            if (await TableExistsAsync(connection, "product", ct))
+            {
+                return;
+            }
+
+            await connection.ExecuteAsync(new CommandDefinition(@"
+                CREATE TABLE `product` (
+                    `id` BIGINT NOT NULL AUTO_INCREMENT,
+                    `name` VARCHAR(255) NOT NULL,
+                    `description` TEXT NULL,
+                    `price` DECIMAL(10,2) NOT NULL,
+                    `stock` INT NOT NULL DEFAULT 0,
+                    `image_url` VARCHAR(500) NULL,
+                    `is_enabled` BOOLEAN NOT NULL DEFAULT TRUE,
+                    `sort` INT NOT NULL DEFAULT 0,
+                    `modifier` VARCHAR(50) NULL,
+                    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+                cancellationToken: ct));
+
+            logger?.LogInformation("✅ Table 'product' created.");
         }
     }
 }

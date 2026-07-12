@@ -81,5 +81,10 @@
         /// 角色已存在
         /// </summary>
         ROLE_EXISTS = -105,
+
+        /// <summary>
+        /// 商品不存在
+        /// </summary>
+        PRODUCT_NOT_EXISTS = -106,
     }
 }

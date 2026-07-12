@@ -10,7 +10,7 @@ export class BusinessError extends Error {
   code: number
 
   constructor(code: number, rawMsg?: string | null) {
-    super(CODE_MESSAGE_MAP[code as ResponseCode] ?? rawMsg ?? '發生未知錯誤')
+    super(rawMsg ?? CODE_MESSAGE_MAP[code as ResponseCode] ?? '發生未知錯誤')
     this.code = code
   }
 }

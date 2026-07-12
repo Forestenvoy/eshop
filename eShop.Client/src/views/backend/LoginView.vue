@@ -62,10 +62,12 @@ const onSubmit = handleSubmit(async (values) => {
 
 <style scoped>
 .login-page {
+  position: fixed;
+  inset: 0;
+  overflow-y: auto;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
   background-color: var(--el-bg-color-page);
 }
 .login-card {

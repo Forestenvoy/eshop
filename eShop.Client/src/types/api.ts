@@ -36,6 +36,7 @@ export enum ResponseCode {
   ROLE_NOT_EXISTS = -103,
   ADMINISTRATOR_CAN_NOT_DELETE = -104,
   ROLE_EXISTS = -105,
+  PRODUCT_NOT_EXISTS = -106,
 }
 
 /** 找不到對照時 fallback 用後端回傳的 msg,或顯示通用訊息 */
@@ -55,4 +56,5 @@ export const CODE_MESSAGE_MAP: Partial<Record<ResponseCode, string>> = {
   [ResponseCode.ROLE_NOT_EXISTS]: '找不到該角色',
   [ResponseCode.ADMINISTRATOR_CAN_NOT_DELETE]: '系統總管帳號不可刪除',
   [ResponseCode.ROLE_EXISTS]: '角色已存在',
+  [ResponseCode.PRODUCT_NOT_EXISTS]: '找不到該商品',
 }

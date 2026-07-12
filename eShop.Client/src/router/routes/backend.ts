@@ -28,6 +28,11 @@ export const backendRoutes: RouteRecordRaw[] = [
             name: 'backend-roles',
             component: () => import('@/views/backend/RoleListView.vue'),
           },
+          {
+            path: 'products',
+            name: 'backend-products',
+            component: () => import('@/views/backend/ProductListView.vue'),
+          },
         ],
       },
     ],

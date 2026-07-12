@@ -24,6 +24,7 @@ namespace eshop.application.Data
             await SeedPermissionAsync(connection, logger, ct);
             await SeedRolePermissionAsync(connection, logger, ct);
             await SeedAdminAsync(connection, logger, ct);
+            await SeedProductAsync(connection, logger, ct);
         }
 
         private static async Task<bool> HasDataAsync(IDbConnection connection, string tableName, CancellationToken ct)
@@ -119,6 +120,47 @@ namespace eshop.application.Data
                 cancellationToken: ct));
 
             logger?.LogInformation("✅ Inserted default record into 'admin'.");
+        }
+
+        private static async Task SeedProductAsync(IDbConnection connection, ILogger? logger, CancellationToken ct)
+        {
+            if (await HasDataAsync(connection, "product", ct))
+            {
+                logger?.LogInformation("✅ 'product' already has data, no insert needed.");
+                return;
+            }
+
+            // id 明確指定,對應 wwwroot/images/product/{id}.webp 這 10 張已經放好的圖檔,不依賴 AUTO_INCREMENT 的隱含順序
+            var products = new[]
+            {
+                new { Id = 1, Name = "AirPods Pro 3", Price = 7490m, Stock = 50 },
+                new { Id = 2, Name = "機械式鍵盤-紅軸", Price = 2890m, Stock = 30 },
+                new { Id = 3, Name = "羅技 MX Master 4", Price = 4190m, Stock = 80 },
+                new { Id = 4, Name = "27型 雙模4K 電競螢幕", Price = 8990m, Stock = 20 },
+                new { Id = 5, Name = "USB-C 11合1雙4K擴充基座", Price = 2990m, Stock = 60 },
+                new { Id = 6, Name = "雙軸鋁合金筆電散熱支架", Price = 599m, Stock = 100 },
+                new { Id = 7, Name = "電競滑鼠墊 XXL", Price = 990m, Stock = 200 },
+                new { Id = 8, Name = "USB-C 快速充電器", Price = 699m, Stock = 70 },
+                new { Id = 9, Name = "NAS 網路儲存伺服器", Price = 19900m, Stock = 10 },
+                new { Id = 10, Name = "外接 SSD 1TB", Price = 3978m, Stock = 35 },
+            }.Select(p => new
+            {
+                p.Id,
+                p.Name,
+                p.Price,
+                p.Stock,
+                ImageUrl = $"/images/product/{p.Id}.webp",
+                Sort = p.Id,
+                Modifier = "System",
+            });
+
+            await connection.ExecuteAsync(new CommandDefinition(@"
+                INSERT INTO `product` (`id`, `name`, `price`, `stock`, `image_url`, `is_enabled`, `sort`, `modifier`)
+                VALUES (@Id, @Name, @Price, @Stock, @ImageUrl, TRUE, @Sort, @Modifier);",
+                products,
+                cancellationToken: ct));
+
+            logger?.LogInformation("✅ Inserted 10 default records into 'product'.");
         }
     }
 }

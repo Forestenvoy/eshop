@@ -76,6 +76,9 @@ try
 
     app.UseCors("CorsPolicy");
 
+    // 啟用靜態文件存取
+    app.UseStaticFiles();
+
     app.UseMiddleware<GlobalErrorHandler>();
 
     if (app.Environment.IsDevelopment())

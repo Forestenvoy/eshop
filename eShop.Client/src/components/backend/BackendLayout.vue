@@ -26,6 +26,7 @@ function handleLogout() {
         <el-menu :default-active="route.path" router class="backend-menu">
           <el-menu-item index="/backend/admins">管理員管理</el-menu-item>
           <el-menu-item index="/backend/roles">角色管理</el-menu-item>
+          <el-menu-item index="/backend/products">商品管理</el-menu-item>
         </el-menu>
       </aside>
       <main class="backend-content">
@@ -37,9 +38,10 @@ function handleLogout() {
 
 <style scoped>
 .backend-layout {
+  position: fixed;
+  inset: 0;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
   background-color: var(--el-bg-color-page);
 }
 .backend-header {
