@@ -22,6 +22,17 @@ try
     var builder = WebApplication.CreateBuilder(args);
     builder.Host.UseSerilog();
 
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("CorsPolicy", policy =>
+        {
+            policy
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+    });
+
     builder.Services.AddControllers()
         .AddNewtonsoftJson(option =>
         {
@@ -62,6 +73,8 @@ try
     builder.Services.AddCoreServices();
 
     var app = builder.Build();
+
+    app.UseCors("CorsPolicy");
 
     app.UseMiddleware<GlobalErrorHandler>();
 

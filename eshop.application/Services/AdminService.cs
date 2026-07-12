@@ -105,6 +105,7 @@ namespace eshop.application.Services
 
             var respone = new AdminUserResponse()
             {
+                AdminId = adminUser.Id,
                 Account = adminUser.Account,
                 RoleId = adminUser.RoleId,
                 IsEnabled = adminUser.IsEnabled,
@@ -125,6 +126,7 @@ namespace eshop.application.Services
 
             var responses = list.Select(adminUser => new AdminUserResponse
             {
+                AdminId = adminUser.Id,
                 Account = adminUser.Account,
                 RoleId = adminUser.RoleId,
                 IsEnabled = adminUser.IsEnabled,

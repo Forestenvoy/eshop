@@ -3,6 +3,11 @@ namespace eshop.application.DTOs.Admin.Response
     public class AdminUserResponse
     {
         /// <summary>
+        /// 管理員 ID
+        /// </summary>
+        public int AdminId { get; set; }
+
+        /// <summary>
         /// 帳號
         /// </summary>
         public string Account { get; set; } = string.Empty;
