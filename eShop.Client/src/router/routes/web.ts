@@ -29,6 +29,12 @@ export const webRoutes: RouteRecordRaw[] = [
         meta: { requiresMemberAuth: true },
         component: () => import('@/views/web/CartView.vue'),
       },
+      {
+        path: 'checkout',
+        name: 'web-checkout',
+        meta: { requiresMemberAuth: true },
+        component: () => import('@/views/web/CheckoutView.vue'),
+      },
     ],
   },
   {

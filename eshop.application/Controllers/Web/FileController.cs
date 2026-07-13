@@ -12,7 +12,7 @@ namespace eshop.application.Controllers.Web
     /// <summary>
     /// 檔案上傳(前台)
     /// </summary>
-    [Route("upload")]
+    [Route("file")]
     [Authorize(Policy = AuthConstants.Policy.WebOnly)]
     [ApiExplorerSettings(GroupName = SwaggerConst.Front)]
     public class FileController : BaseApiController
@@ -29,7 +29,7 @@ namespace eshop.application.Controllers.Web
         /// 上傳大頭貼
         /// </summary>
         /// <param name="file">圖片檔案(webp/jpg/png,大小上限 1MB)</param>
-        [HttpPost("avatar")]
+        [HttpPost("upload/avatar")]
         [SwaggerResponse(StatusCodes.Status200OK, "成功", typeof(ResponseDataModel<FileUploadResponse>))]
         public async Task<IActionResult> UploadAvatarAsync(IFormFile file)
         {

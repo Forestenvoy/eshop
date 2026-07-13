@@ -108,6 +108,16 @@ namespace eshop.application.Common
             public const string UserEdit = "USER_EDIT";
 
             /// <summary>
+            /// 訂單-檢視內容
+            /// </summary>
+            public const string OrderView = "ORDER_VIEW";
+
+            /// <summary>
+            /// 訂單-狀態切換(出貨、完成、取消)
+            /// </summary>
+            public const string OrderEdit = "ORDER_EDIT";
+
+            /// <summary>
             /// 所有權限
             /// </summary>
             public static readonly string[] All =
@@ -121,7 +131,9 @@ namespace eshop.application.Common
                 ProductView,
                 ProductEdit,
                 UserView,
-                UserEdit
+                UserEdit,
+                OrderView,
+                OrderEdit
             ];
         }
     }

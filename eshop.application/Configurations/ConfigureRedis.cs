@@ -1,4 +1,5 @@
-﻿using RedLockNet;
+﻿using eshop.application.Cache;
+using RedLockNet;
 using RedLockNet.SERedis;
 using RedLockNet.SERedis.Configuration;
 using Serilog;
@@ -37,6 +38,8 @@ namespace eshop.application.Configurations
                 var redis = sp.GetRequiredService<IConnectionMultiplexer>();
                 return redis.GetDatabase();
             });
+
+            services.AddScoped<ProductCache>();
 
             Log.Information("Redis has been configured successfully.");
 

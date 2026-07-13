@@ -1,4 +1,4 @@
-using eshop.application.Models.Admin;
+using eshop.application.Models;
 
 namespace eshop.application.Repositories.Admin.Interfaces
 {

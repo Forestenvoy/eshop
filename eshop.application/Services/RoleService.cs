@@ -1,7 +1,7 @@
 using eshop.application.Common.Models;
 using eshop.application.DTOs.Role.Request;
 using eshop.application.DTOs.Role.Response;
-using eshop.application.Models.Admin;
+using eshop.application.Models;
 using eshop.application.Repositories.Admin.Interfaces;
 
 namespace eshop.application.Services

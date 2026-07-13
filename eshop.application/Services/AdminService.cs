@@ -1,7 +1,7 @@
 using eshop.application.Common.Models;
 using eshop.application.DTOs.Admin.Request;
 using eshop.application.DTOs.Admin.Response;
-using eshop.application.Models.Admin;
+using eshop.application.Models;
 using eshop.application.Repositories.Admin.Interfaces;
 using Microsoft.AspNetCore.Identity;
 

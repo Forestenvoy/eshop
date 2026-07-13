@@ -4,6 +4,7 @@ import { useForm } from 'vee-validate'
 import { ElMessage } from 'element-plus'
 import { UserFilled } from '@element-plus/icons-vue'
 import { getProfileApi, updateProfileApi, changePasswordApi } from '@/api/webAuth'
+import { getBalanceApi, topUpBalanceApi } from '@/api/balance'
 import { updateProfileValidationSchema, changePasswordValidationSchema } from '@/schemas/webAuth'
 import { useAvatarUpload } from '@/composables/useAvatarUpload'
 import { useMemberStore } from '@/stores/member'
@@ -34,7 +35,34 @@ async function fetchProfile() {
 
 onMounted(() => {
   fetchProfile()
+  fetchBalance()
 })
+
+// 餘額查詢/充值
+const balance = ref(0)
+const topUpAmount = ref(100)
+const topUpSubmitting = ref(false)
+
+async function fetchBalance() {
+  try {
+    balance.value = (await getBalanceApi()).amount
+  } catch (e) {
+    showApiError(e, SESSION_ERROR_OVERRIDES)
+  }
+}
+
+async function handleTopUp() {
+  topUpSubmitting.value = true
+  try {
+    await topUpBalanceApi({ amount: topUpAmount.value })
+    ElMessage.success('充值成功')
+    await fetchBalance()
+  } catch (e) {
+    showApiError(e, SESSION_ERROR_OVERRIDES)
+  } finally {
+    topUpSubmitting.value = false
+  }
+}
 
 // 編輯個人資料表單
 const {
@@ -190,6 +218,17 @@ const onPasswordSubmit = handlePasswordSubmit(async (values) => {
         </div>
       </el-form>
     </el-card>
+
+    <el-card class="profile-card">
+      <template #header>餘額</template>
+      <div class="balance-row">
+        <span class="balance-amount">NT$ {{ balance }}</span>
+      </div>
+      <div class="topup-row">
+        <el-input-number v-model="topUpAmount" :min="1" :precision="0" />
+        <el-button type="primary" :loading="topUpSubmitting" @click="handleTopUp">充值</el-button>
+      </div>
+    </el-card>
   </div>
 </template>
 
@@ -224,6 +263,18 @@ const onPasswordSubmit = handlePasswordSubmit(async (values) => {
 .form-actions {
   display: flex;
   justify-content: flex-end;
+  gap: 8px;
+}
+.balance-row {
+  padding-bottom: 12px;
+}
+.balance-amount {
+  font-size: 1.4em;
+  font-weight: 700;
+  color: #e6a23c;
+}
+.topup-row {
+  display: flex;
   gap: 8px;
 }
 </style>

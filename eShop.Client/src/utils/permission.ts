@@ -1,0 +1,17 @@
+/**
+ * 對應後端 Common/AuthConstants.cs 的 Permission 常數,用於前端選單/路由的權限碼比對。
+ */
+export const PERMISSION = {
+  ROLE_VIEW: 'ROLE_VIEW',
+  ROLE_EDIT: 'ROLE_EDIT',
+  ADMIN_VIEW: 'ADMIN_VIEW',
+  ADMIN_EDIT: 'ADMIN_EDIT',
+  RECORD_VIEW: 'RECORD_VIEW',
+  RECORD_EXPORT: 'RECORD_EXPORT',
+  PRODUCT_VIEW: 'PRODUCT_VIEW',
+  PRODUCT_EDIT: 'PRODUCT_EDIT',
+  USER_VIEW: 'USER_VIEW',
+  USER_EDIT: 'USER_EDIT',
+  ORDER_VIEW: 'ORDER_VIEW',
+  ORDER_EDIT: 'ORDER_EDIT',
+} as const

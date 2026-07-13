@@ -48,6 +48,7 @@ namespace eshop.application.Configurations
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IBalanceRepository, BalanceRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
 
             return services;
         }

@@ -1,8 +1,8 @@
 using eshop.application.Data;
-using eshop.application.Models.Admin;
 using eshop.application.Repositories.Admin.Interfaces;
 using Dapper;
 using System.Data.Common;
+using eshop.application.Models;
 
 namespace eshop.application.Repositories.Admin
 {

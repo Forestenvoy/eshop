@@ -1,7 +1,8 @@
+using eshop.application.Cache;
 using eshop.application.Common.Models;
 using eshop.application.DTOs.Product.Request;
 using eshop.application.DTOs.Product.Response;
-using eshop.application.Models.Admin;
+using eshop.application.Models;
 using eshop.application.Repositories.Admin.Interfaces;
 
 namespace eshop.application.Services
@@ -10,11 +11,31 @@ namespace eshop.application.Services
     {
         private readonly ILogger<ProductService> _logger;
         private readonly IProductRepository _productRepository;
+        private readonly ProductCache _productCache;
 
-        public ProductService(ILogger<ProductService> logger, IProductRepository productRepository)
+        public ProductService(ILogger<ProductService> logger, IProductRepository productRepository, ProductCache productCache)
         {
             _logger = logger;
             _productRepository = productRepository;
+            _productCache = productCache;
+        }
+
+        /// <summary>
+        /// 取得上架商品清單(優先讀快取,cache miss 才查 DB 並回填)
+        /// </summary>
+        private async Task<List<Product>> GetEnabledProductsAsync()
+        {
+            return await _productCache.GetOrSetEnabledListAsync(
+                async () => (await _productRepository.GetAllEnabledAsync()).ToList());
+        }
+
+        /// <summary>
+        /// 直接查 DB 重建上架商品快取(供後台異動商品後、排程刷新共用)
+        /// </summary>
+        public async Task RefreshCacheAsync()
+        {
+            var products = (await _productRepository.GetAllEnabledAsync()).ToList();
+            await _productCache.SetEnabledListAsync(products);
         }
 
         /// <summary>
@@ -91,6 +112,7 @@ namespace eshop.application.Services
             };
 
             await _productRepository.AddAsync(product);
+            await RefreshCacheAsync();
 
             _logger.LogInformation("商品新增成功");
 
@@ -124,6 +146,7 @@ namespace eshop.application.Services
             };
 
             await _productRepository.UpdateAsync(product);
+            await RefreshCacheAsync();
 
             _logger.LogInformation("商品編輯成功");
 
@@ -142,6 +165,7 @@ namespace eshop.application.Services
             }
 
             await _productRepository.ToggleAsync(request.ProductId, request.IsEnabled, adminName);
+            await RefreshCacheAsync();
 
             _logger.LogInformation("商品上下架狀態更新成功");
 
@@ -153,8 +177,14 @@ namespace eshop.application.Services
         /// </summary>
         public async Task<ResponsePagingDataModel<ProductPublicResponse>> GetPublicListAsync(string? keyword, int pageIndex, int pageSize)
         {
-            var count = await _productRepository.GetEnabledCountAsync(keyword);
-            var list = await _productRepository.GetEnabledPagedListAsync(keyword, pageIndex, pageSize);
+            var products = await GetEnabledProductsAsync();
+
+            var filtered = string.IsNullOrWhiteSpace(keyword)
+                ? products
+                : products.Where(x => x.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            var count = filtered.Count;
+            var list = filtered.Skip((pageIndex - 1) * pageSize).Take(pageSize);
 
             var responses = list.Select(x => new ProductPublicResponse
             {
@@ -173,7 +203,8 @@ namespace eshop.application.Services
         /// </summary>
         public async Task<ResponseDataModel<ProductResponse>> GetPublicAsync(long id)
         {
-            var product = await _productRepository.GetEnabledAsync(id);
+            var products = await GetEnabledProductsAsync();
+            var product = products.FirstOrDefault(x => x.Id == id);
             if (product == null)
             {
                 return ApiResponse.Fail<ProductResponse>(ResponseCode.PRODUCT_NOT_EXISTS);
@@ -207,6 +238,7 @@ namespace eshop.application.Services
             }
 
             await _productRepository.SaveSortAsync(sort);
+            await RefreshCacheAsync();
 
             _logger.LogInformation("商品排序更新成功");
 

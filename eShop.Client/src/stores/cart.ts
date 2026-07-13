@@ -76,5 +76,10 @@ export const useCartStore = defineStore('cart', () => {
     items.value = items.value.filter((i) => i.productId !== productId)
   }
 
-  return { items, totalCount, totalAmount, addItem, updateQuantity, removeItem }
+  /** 結帳成功後清空購物車;既有的 items watcher 會自動把清空後的結果同步回 localStorage */
+  function clearCart(): void {
+    items.value = []
+  }
+
+  return { items, totalCount, totalAmount, addItem, updateQuantity, removeItem, clearCart }
 })

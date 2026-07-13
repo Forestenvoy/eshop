@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace eshop.application.Models.Admin
+namespace eshop.application.Models
 {
     /// <summary>
     /// 權限

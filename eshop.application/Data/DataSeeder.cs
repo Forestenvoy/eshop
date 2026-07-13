@@ -2,7 +2,6 @@ using Dapper;
 using eshop.application.Common;
 using eshop.application.Enums;
 using eshop.application.Models;
-using eshop.application.Models.Admin;
 using Microsoft.AspNetCore.Identity;
 using MySqlConnector;
 using System.Data;
@@ -174,7 +173,7 @@ namespace eshop.application.Data
                 return;
             }
 
-            var user = new User { Email = "test@example.com" };
+            var user = new User { Email = "test@gmail.com" };
             var hashedPassword = new PasswordHasher<User>().HashPassword(user, "123456");
 
             var userId = await connection.ExecuteScalarAsync<long>(new CommandDefinition(@"

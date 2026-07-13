@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useIdentityStore } from '@/stores/identity'
+import { PERMISSION } from '@/utils/permission'
 
 const identity = useIdentityStore()
 const route = useRoute()
@@ -10,6 +12,12 @@ function handleLogout() {
   identity.logout()
   router.push('/backend/login')
 }
+
+// 重新整理頁面等未經過 login() 的情境,補刷新一次最新權限碼;失敗不特別提示,
+// 若是真的未登入/token 失效,http.ts 既有的 response interceptor 會強制登出導回登入頁
+onMounted(() => {
+  identity.fetchPermissions().catch(() => {})
+})
 </script>
 
 <template>
@@ -24,10 +32,21 @@ function handleLogout() {
     <div class="backend-body">
       <aside class="backend-sidebar">
         <el-menu :default-active="route.path" router class="backend-menu">
-          <el-menu-item index="/backend/admins">管理員管理</el-menu-item>
-          <el-menu-item index="/backend/roles">角色管理</el-menu-item>
-          <el-menu-item index="/backend/users">用戶管理</el-menu-item>
-          <el-menu-item index="/backend/products">商品管理</el-menu-item>
+          <el-menu-item v-if="identity.hasPermission(PERMISSION.ADMIN_VIEW)" index="/backend/admins">
+            管理員管理
+          </el-menu-item>
+          <el-menu-item v-if="identity.hasPermission(PERMISSION.ROLE_VIEW)" index="/backend/roles">
+            角色管理
+          </el-menu-item>
+          <el-menu-item v-if="identity.hasPermission(PERMISSION.USER_VIEW)" index="/backend/users">
+            用戶管理
+          </el-menu-item>
+          <el-menu-item v-if="identity.hasPermission(PERMISSION.PRODUCT_VIEW)" index="/backend/products">
+            商品管理
+          </el-menu-item>
+          <el-menu-item v-if="identity.hasPermission(PERMISSION.ORDER_VIEW)" index="/backend/orders">
+            訂單管理
+          </el-menu-item>
         </el-menu>
       </aside>
       <main class="backend-content">

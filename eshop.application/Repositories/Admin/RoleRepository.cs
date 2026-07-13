@@ -1,6 +1,6 @@
 using Dapper;
 using eshop.application.Data;
-using eshop.application.Models.Admin;
+using eshop.application.Models;
 using eshop.application.Repositories.Admin.Interfaces;
 using System.Data.Common;
 

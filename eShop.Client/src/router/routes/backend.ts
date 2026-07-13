@@ -1,4 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router'
+import { PERMISSION } from '@/utils/permission'
 
 export const backendRoutes: RouteRecordRaw[] = [
   {
@@ -21,22 +22,37 @@ export const backendRoutes: RouteRecordRaw[] = [
           {
             path: 'admins',
             name: 'backend-admins',
+            meta: { permission: PERMISSION.ADMIN_VIEW },
             component: () => import('@/views/backend/AdminListView.vue'),
           },
           {
             path: 'roles',
             name: 'backend-roles',
+            meta: { permission: PERMISSION.ROLE_VIEW },
             component: () => import('@/views/backend/RoleListView.vue'),
           },
           {
             path: 'users',
             name: 'backend-users',
+            meta: { permission: PERMISSION.USER_VIEW },
             component: () => import('@/views/backend/UserListView.vue'),
           },
           {
             path: 'products',
             name: 'backend-products',
+            meta: { permission: PERMISSION.PRODUCT_VIEW },
             component: () => import('@/views/backend/ProductListView.vue'),
+          },
+          {
+            path: 'orders',
+            name: 'backend-orders',
+            meta: { permission: PERMISSION.ORDER_VIEW },
+            component: () => import('@/views/backend/OrderListView.vue'),
+          },
+          {
+            path: 'forbidden',
+            name: 'backend-forbidden',
+            component: () => import('@/views/backend/ForbiddenView.vue'),
           },
         ],
       },

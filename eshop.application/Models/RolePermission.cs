@@ -1,26 +1,23 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace eshop.application.Models.Admin
+namespace eshop.application.Models
 {
     /// <summary>
-    /// 角色
+    /// 角色與權限的對應
     /// </summary>
-    public class Role
+    public class RolePermission
     {
         /// <summary>
-        /// ID
+        /// 角色 ID
         /// </summary>
-        public int Id { get; set; }
+        [Column("role_id")]
+        public int RoleId { get; set; }
 
         /// <summary>
-        /// 名稱
+        /// 權限 ID
         /// </summary>
-        public string Name { get; set; } = default!;
-
-        /// <summary>
-        /// 操作人
-        /// </summary>
-        public string? Modifier { get; set; }
+        [Column("permissiom_id")]
+        public int PermissionId { get; set; }
 
         /// <summary>
         /// 建立時間

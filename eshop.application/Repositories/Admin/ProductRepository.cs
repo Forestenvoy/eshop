@@ -1,8 +1,8 @@
 using eshop.application.Data;
-using eshop.application.Models.Admin;
 using eshop.application.Repositories.Admin.Interfaces;
 using Dapper;
 using System.Data.Common;
+using eshop.application.Models;
 
 namespace eshop.application.Repositories.Admin
 {
@@ -89,48 +89,22 @@ namespace eshop.application.Repositories.Admin
         }
 
         /// <inheritdoc />
-        public async Task<Product?> GetEnabledAsync(long id)
+        public async Task<IEnumerable<Product>> GetAllEnabledAsync()
         {
-            const string sql = "SELECT * FROM `product` WHERE `id` = @id AND `is_enabled` = TRUE";
+            const string sql = "SELECT * FROM `product` WHERE `is_enabled` = TRUE ORDER BY `sort` DESC, `id` ASC;";
 
-            return await _dbConnection.QuerySingleOrDefaultAsync<Product>(sql, new { id }, _dbTransaction);
+            return await _dbConnection.QueryAsync<Product>(sql, transaction: _dbTransaction);
         }
 
         /// <inheritdoc />
-        public async Task<int> GetEnabledCountAsync(string? keyword)
+        public async Task<int> DecrementStockAsync(long productId, int quantity)
         {
-            var whereSql = string.IsNullOrWhiteSpace(keyword)
-                ? " WHERE `is_enabled` = TRUE"
-                : " WHERE `is_enabled` = TRUE AND `name` LIKE CONCAT('%', @Keyword, '%')";
+            const string sql = @"
+                UPDATE `product`
+                SET `stock` = `stock` - @quantity
+                WHERE `id` = @productId AND `stock` >= @quantity AND `is_enabled` = TRUE;";
 
-            var sql = $"SELECT COUNT(1) FROM `product`{whereSql};";
-
-            return await _dbConnection.ExecuteScalarAsync<int>(sql, new { Keyword = keyword }, _dbTransaction);
-        }
-
-        /// <inheritdoc />
-        public async Task<IEnumerable<Product>> GetEnabledPagedListAsync(string? keyword, int pageIndex, int pageSize)
-        {
-            var whereSql = string.IsNullOrWhiteSpace(keyword)
-                ? " WHERE `is_enabled` = TRUE"
-                : " WHERE `is_enabled` = TRUE AND `name` LIKE CONCAT('%', @Keyword, '%')";
-
-            var sql = $@"
-                SELECT *
-                FROM `product`
-                {whereSql}
-                ORDER BY `sort` DESC, `id` ASC
-                LIMIT @Offset, @PageSize;
-            ";
-
-            var parameters = new
-            {
-                Keyword = keyword,
-                Offset = (pageIndex - 1) * pageSize,
-                PageSize = pageSize
-            };
-
-            return await _dbConnection.QueryAsync<Product>(sql, parameters, _dbTransaction);
+            return await _dbConnection.ExecuteAsync(sql, new { productId, quantity }, _dbTransaction);
         }
 
         /// <inheritdoc />

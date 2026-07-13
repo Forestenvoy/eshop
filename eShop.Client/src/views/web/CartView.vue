@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
 import { Delete } from '@element-plus/icons-vue'
 import { useCartStore } from '@/stores/cart'
 import { resolveAssetUrl } from '@/utils/url'
 import type { CartItem } from '@/stores/cart'
 
+const router = useRouter()
 const cart = useCartStore()
 
 function handleQuantityChange(item: CartItem, value: number | undefined) {
@@ -12,7 +13,7 @@ function handleQuantityChange(item: CartItem, value: number | undefined) {
 }
 
 function handleCheckout() {
-  ElMessage.info('訂單功能尚未開放,敬請期待')
+  router.push('/checkout')
 }
 </script>
 

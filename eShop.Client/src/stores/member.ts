@@ -11,6 +11,7 @@ export const useMemberStore = defineStore('member', () => {
   const token = ref<string | null>(sessionStorage.getItem(TOKEN_STORAGE_KEY))
   const userId = ref<number | null>(null)
   const name = ref<string | null>(null)
+  const avatar = ref<string | null>(null)
 
   function syncFromToken(value: string) {
     const payload = decodeJwtPayload(value)
@@ -24,6 +25,7 @@ export const useMemberStore = defineStore('member', () => {
     try {
       const profile = await getProfileApi()
       name.value = profile.name
+      avatar.value = profile.avatar
     } catch {
       // ignore
     }
@@ -67,6 +69,7 @@ export const useMemberStore = defineStore('member', () => {
     token.value = null
     userId.value = null
     name.value = null
+    avatar.value = null
     sessionStorage.removeItem(TOKEN_STORAGE_KEY)
   }
 
@@ -74,6 +77,7 @@ export const useMemberStore = defineStore('member', () => {
     token,
     userId,
     name,
+    avatar,
     isLoggedIn,
     showAuthModal,
     authMode,

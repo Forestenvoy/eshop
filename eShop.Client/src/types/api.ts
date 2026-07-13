@@ -40,6 +40,10 @@ export enum ResponseCode {
   EMAIL_EXISTS = -107,
   USER_NOT_EXISTS = -108,
   USER_DISABLED = -109,
+  ORDER_NOT_EXISTS = -110,
+  ORDER_STATUS_INVALID = -111,
+  PRODUCT_STOCK_NOT_ENOUGH = -112,
+  BALANCE_NOT_ENOUGH = -113,
 }
 
 /** 找不到對照時 fallback 用後端回傳的 msg,或顯示通用訊息 */
@@ -63,4 +67,8 @@ export const CODE_MESSAGE_MAP: Partial<Record<ResponseCode, string>> = {
   [ResponseCode.EMAIL_EXISTS]: 'Email 已被註冊',
   [ResponseCode.USER_NOT_EXISTS]: '找不到該會員',
   [ResponseCode.USER_DISABLED]: '該帳號已被停權',
+  [ResponseCode.ORDER_NOT_EXISTS]: '找不到該訂單',
+  [ResponseCode.ORDER_STATUS_INVALID]: '訂單目前狀態不允許此操作',
+  [ResponseCode.PRODUCT_STOCK_NOT_ENOUGH]: '商品庫存不足',
+  [ResponseCode.BALANCE_NOT_ENOUGH]: '餘額不足',
 }

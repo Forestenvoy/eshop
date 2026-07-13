@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace eshop.application.Models.Admin
+namespace eshop.application.Models
 {
     /// <summary>
     /// 商品

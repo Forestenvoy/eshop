@@ -66,11 +66,15 @@ try
 
     builder.Services.AddRedis(configuration);
 
+    builder.Services.AddDistributedLock();
+
     builder.Services.AddJwtAuthenticationAndAuthorization(configuration, builder.Environment);
 
     builder.Services.AddCustomSwaggerGen();
 
     builder.Services.AddCoreServices();
+
+    builder.Services.AddBackgroundTasks();
 
     var app = builder.Build();
 
@@ -99,6 +103,8 @@ try
     app.UseAuthorization();
 
     app.MapControllers();
+
+    app.UseBackgroundTaskScheduler();
 
     app.Run();
 }

@@ -23,6 +23,25 @@ export function setupAuthGuard(router: Router): void {
 }
 
 /**
+ * 依 route.meta.permission 檢查目前登入的管理員是否有對應權限碼,
+ * 沒有就導去「權限不足」頁面,避免使用者繞過選單隱藏直接輸入網址存取。
+ * 放在 setupAuthGuard 之後執行,確保先過了登入檢查才判斷權限;
+ * 只同步讀取 store 目前的 permissions(由 syncFromToken/fetchPermissions 準備好),
+ * guard 本身不呼叫 API,避免路由跳轉卡在等待網路請求。
+ */
+export function setupPermissionGuard(router: Router): void {
+  router.beforeEach((to) => {
+    const identity = useIdentityStore()
+
+    if (to.meta.permission && identity.isLoggedIn && !identity.hasPermission(to.meta.permission)) {
+      return { name: 'backend-forbidden' }
+    }
+
+    return true
+  })
+}
+
+/**
  * 後台 UI 統一走 Element Plus 暗色系,前台維持預設淺色。
  * Element Plus 的 ElMessage/ElMessageBox 會直接掛載到 document.body,不在任何元件的
  * DOM 子樹裡,所以不能只在個別元件根節點加 class,改在這裡切換 <html> 的 class,

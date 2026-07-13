@@ -16,6 +16,8 @@ namespace eshop.application.Configurations
             services.AddScoped<FileService>();
             services.AddScoped<UserService>();
             services.AddScoped<AuthService>();
+            services.AddScoped<OrderService>();
+            services.AddScoped<BalanceService>();
 
             return services;
         }

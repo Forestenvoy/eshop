@@ -41,7 +41,7 @@ export async function uploadAvatarApi(file: File): Promise<string> {
   const formData = new FormData()
   formData.append('file', file)
 
-  const { data } = await http.post<ResponseDataModel<{ url: string }>>('/upload/avatar', formData)
+  const { data } = await http.post<ResponseDataModel<{ url: string }>>('/file/upload/avatar', formData)
   assertSuccess(data)
   return data.data!.url
 }

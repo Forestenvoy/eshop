@@ -101,5 +101,25 @@
         /// 會員已停權
         /// </summary>
         USER_DISABLED = -109,
+
+        /// <summary>
+        /// 訂單不存在
+        /// </summary>
+        ORDER_NOT_EXISTS = -110,
+
+        /// <summary>
+        /// 訂單目前狀態不允許此操作
+        /// </summary>
+        ORDER_STATUS_INVALID = -111,
+
+        /// <summary>
+        /// 商品庫存不足
+        /// </summary>
+        PRODUCT_STOCK_NOT_ENOUGH = -112,
+
+        /// <summary>
+        /// 餘額不足
+        /// </summary>
+        BALANCE_NOT_ENOUGH = -113,
     }
 }

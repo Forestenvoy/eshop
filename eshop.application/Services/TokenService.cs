@@ -1,7 +1,6 @@
 using eshop.application.Common;
 using eshop.application.Enums;
 using eshop.application.Models;
-using eshop.application.Models.Admin;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { loginApi } from '@/api/admin'
+import { getAdminInfoApi, loginApi } from '@/api/admin'
 import { decodeJwtPayload, getPermissionsFromPayload, isTokenExpired } from '@/utils/jwt'
 import type { AdminLoginRequest } from '@/types/admin'
 
@@ -27,11 +27,20 @@ export const useIdentityStore = defineStore('identity', () => {
     return permissions.value.includes(code)
   }
 
+  // 呼叫 /admin/info 取得該管理員角色目前實際擁有的權限碼,比 JWT 簽發當下的 P claim 更即時、
+  // 權威(角色權限異動不需要重新登入就能反映),登入完成後與每次進入後台 layout 時都會呼叫一次
+  async function fetchPermissions(): Promise<void> {
+    const info = await getAdminInfoApi()
+    account.value = info.account
+    permissions.value = info.permissions
+  }
+
   async function login(payload: AdminLoginRequest): Promise<void> {
     const receivedToken = await loginApi(payload)
     token.value = receivedToken
     sessionStorage.setItem(TOKEN_STORAGE_KEY, receivedToken)
     syncFromToken(receivedToken)
+    await fetchPermissions()
   }
 
   function logout(): void {
@@ -41,5 +50,5 @@ export const useIdentityStore = defineStore('identity', () => {
     sessionStorage.removeItem(TOKEN_STORAGE_KEY)
   }
 
-  return { token, account, permissions, isLoggedIn, hasPermission, login, logout }
+  return { token, account, permissions, isLoggedIn, hasPermission, fetchPermissions, login, logout }
 })

@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router'
 import { UserFilled, ShoppingCart } from '@element-plus/icons-vue'
 import { useMemberStore } from '@/stores/member'
 import { useCartStore } from '@/stores/cart'
+import { resolveAssetUrl } from '@/utils/url'
 import AuthModal from './AuthModal.vue'
 
 const router = useRouter()
@@ -32,7 +33,11 @@ function handleCommand(command: string | number | object) {
           </el-badge>
           <el-dropdown @command="handleCommand">
             <span class="avatar-trigger">
-              <el-avatar :size="32" :icon="UserFilled" />
+              <el-avatar
+                :size="32"
+                :src="member.avatar ? resolveAssetUrl(member.avatar) : undefined"
+                :icon="UserFilled"
+              />
               <span class="member-name">{{ member.name ?? '會員' }}</span>
             </span>
             <template #dropdown>

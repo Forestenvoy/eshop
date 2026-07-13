@@ -24,6 +24,8 @@ namespace eshop.application.Data
             await CreateProductTableAsync(connection, logger, ct);
             await CreateUserTableAsync(connection, logger, ct);
             await CreateBalanceTableAsync(connection, logger, ct);
+            await CreateOrderTableAsync(connection, logger, ct);
+            await CreateOrderItemTableAsync(connection, logger, ct);
         }
 
         private static async Task<bool> TableExistsAsync(MySqlConnection connection, string tableName, CancellationToken ct)
@@ -204,6 +206,61 @@ namespace eshop.application.Data
                 cancellationToken: ct));
 
             logger?.LogInformation("✅ Table 'balance' created.");
+        }
+
+        private static async Task CreateOrderTableAsync(MySqlConnection connection, ILogger? logger, CancellationToken ct)
+        {
+            if (await TableExistsAsync(connection, "order", ct))
+            {
+                return;
+            }
+
+            await connection.ExecuteAsync(new CommandDefinition(@"
+                CREATE TABLE `order` (
+                    `id` BIGINT NOT NULL AUTO_INCREMENT,
+                    `order_no` VARCHAR(50) NOT NULL,
+                    `user_id` BIGINT NOT NULL,
+                    `total_amount` DECIMAL(12,2) NOT NULL,
+                    `status` TINYINT NOT NULL DEFAULT 0,
+                    `payment_status` TINYINT NOT NULL DEFAULT 0,
+                    `receiver_name` VARCHAR(100) NOT NULL,
+                    `receiver_phone` VARCHAR(20) NOT NULL,
+                    `receiver_address` VARCHAR(255) NOT NULL,
+                    `remark` VARCHAR(500) NULL,
+                    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    PRIMARY KEY (`id`),
+                    UNIQUE KEY `uk_order_order_no` (`order_no`),
+                    CONSTRAINT `fk_order_user` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE RESTRICT
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+                cancellationToken: ct));
+
+            logger?.LogInformation("✅ Table 'order' created.");
+        }
+
+        private static async Task CreateOrderItemTableAsync(MySqlConnection connection, ILogger? logger, CancellationToken ct)
+        {
+            if (await TableExistsAsync(connection, "order_item", ct))
+            {
+                return;
+            }
+
+            await connection.ExecuteAsync(new CommandDefinition(@"
+                CREATE TABLE `order_item` (
+                    `id` BIGINT NOT NULL AUTO_INCREMENT,
+                    `order_id` BIGINT NOT NULL,
+                    `product_id` BIGINT NOT NULL,
+                    `product_name` VARCHAR(255) NOT NULL,
+                    `price` DECIMAL(10,2) NOT NULL,
+                    `quantity` INT NOT NULL,
+                    `subtotal` DECIMAL(10,2) NOT NULL,
+                    PRIMARY KEY (`id`),
+                    CONSTRAINT `fk_order_item_order` FOREIGN KEY (`order_id`) REFERENCES `order`(`id`) ON DELETE CASCADE,
+                    CONSTRAINT `fk_order_item_product` FOREIGN KEY (`product_id`) REFERENCES `product`(`id`) ON DELETE RESTRICT
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+                cancellationToken: ct));
+
+            logger?.LogInformation("✅ Table 'order_item' created.");
         }
     }
 }
