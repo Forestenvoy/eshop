@@ -256,7 +256,7 @@ namespace eshop.application.Services
             await _unitOfWork.BeginTransactionAsync();
             try
             {
-                foreach (var (product, quantity) in snapshots)
+                foreach (var (product, quantity) in snapshots.OrderBy(x => x.Product.Id))
                 {
                     var affected = await _productRepository.DecrementStockAsync(product.Id, quantity);
                     if (affected == 0)
