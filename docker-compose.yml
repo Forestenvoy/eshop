@@ -11,3 +11,9 @@ services:
     build:
       context: .
       dockerfile: eshop.application/Dockerfile
+
+  eshop.client:
+    image: ${DOCKER_REGISTRY-}eshopclient
+    build:
+      context: .
+      dockerfile: eShop.Client/Dockerfile

@@ -26,4 +26,9 @@ services:
     depends_on:
       - mysql
       - redis
-    
+
+  eshop.client:
+    ports:
+      - "16783:80"
+    depends_on:
+      - eshop.application
