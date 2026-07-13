@@ -22,6 +22,16 @@ const loading = ref(false)
 const profile = ref<UserProfileResponse | null>(null)
 const editing = ref(false)
 
+function formatBirthday(value: string | null | undefined): string {
+  if (!value) return '—'
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return value
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
 async function fetchProfile() {
   loading.value = true
   try {
@@ -165,7 +175,7 @@ const onPasswordSubmit = handlePasswordSubmit(async (values) => {
         <div class="field"><span class="label">名稱</span><span>{{ profile.name ?? '—' }}</span></div>
         <div class="field"><span class="label">性別</span><span>{{ GENDER_LABEL[profile.gender] }}</span></div>
         <div class="field"><span class="label">電話</span><span>{{ profile.phone ?? '—' }}</span></div>
-        <div class="field"><span class="label">生日</span><span>{{ profile.birthday ?? '—' }}</span></div>
+        <div class="field"><span class="label">生日</span><span>{{ formatBirthday(profile.birthday) }}</span></div>
         <div class="field"><span class="label">地址</span><span>{{ profile.address ?? '—' }}</span></div>
       </div>
 
